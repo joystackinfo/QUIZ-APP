@@ -15,3 +15,32 @@ body{
     border-radius: 10px;
     padding:30px;
 }
+.app h1{
+    font-size: 25px;
+    color:#7d1d83;
+    font-weight: 600;
+    border-bottom: 1px solid #333;
+    padding-bottom: 30px;
+}
+.Quiz{
+    padding: 20px 0;
+}
+.Quiz h2{
+    font-size: 18px;
+    color: #8916e6;
+    font-weight: 600;
+}
+.btn{
+    background-color: #c7a3a3;
+    color:#222;
+    font-weight: 500;
+    width:100%;
+    border: 2px solid #222;
+    padding:10px;
+     margin:10px;
+     text-align: left;
+     border-radius: 4px;
+     cursor: pointer;
+     transition: all 0.5s ease;
+}
+
