@@ -3,4 +3,15 @@
     padding:0;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
-};
+}
+body{
+    background: linear-gradient(135deg, #e986b8, #ae9be1, #a6a0ff);
+}
+.app{
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 600px;
+    margin:100px auto 0;
+    border-radius: 10px;
+    padding:30px;
+}
