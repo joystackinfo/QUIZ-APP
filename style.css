@@ -31,7 +31,7 @@ body{
     font-weight: 600;
 }
 .btn{
-    background-color: #c7a3a3;
+    background-color: #dec4c4;
     color:#222;
     font-weight: 500;
     width:100%;
@@ -43,4 +43,18 @@ body{
      cursor: pointer;
      transition: all 0.5s ease;
 }
-
+.btn:hover{
+    background-color: #8b1984;
+    color:#fff;
+}
+#next-btn{
+    background-color: #3d0441;
+    color:#fff;
+    border:none;
+    font-weight: 500;
+    margin: 20px auto 0;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display:none;
+}
