@@ -17,7 +17,7 @@ body{
 }
 .app h1{
     font-size: 25px;
-    color:#7d1d83;
+    color: #4d0d81;
     font-weight: 600;
     border-bottom: 1px solid #333;
     padding-bottom: 30px;
@@ -27,7 +27,7 @@ body{
 }
 .Quiz h2{
     font-size: 18px;
-    color: #8916e6;
+    color: #7014bc;
     font-weight: 600;
 }
 .btn{
@@ -43,18 +43,29 @@ body{
      cursor: pointer;
      transition: all 0.5s ease;
 }
-.btn:hover{
+.btn:hover:not([disabled]){
     background-color: #8b1984;
     color:#fff;
 }
+.btn:disabled{
+    cursor: no-drop;
+}
+
 #next-btn{
-    background-color: #3d0441;
+    background-color: #620668;
     color:#fff;
     border:none;
+    width: 100px;
     font-weight: 500;
-    margin: 20px auto 0;
+    margin: 50px auto 0;
     padding: 10px;
-    border-radius: 4px;
+    border-radius: 7px;
     cursor: pointer;
     display:none;
+}
+.correct{
+    background-color: #1cc264;
+}
+.incorrect{
+    background-color: #db5d59;
 }
