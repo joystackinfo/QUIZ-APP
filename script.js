@@ -33,7 +33,7 @@ const answerButtonElement = document.getElementById("answer-button"); // get ans
 const nextButton = document.getElementById("next-btn"); // get next button
 
 let currentQuestionIndex = 0; // tracks the current question index
-let score = 0;
+let score = 0; 
 
 // Define questions array (adjust or extend with your real questions)
 
