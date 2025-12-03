@@ -215,9 +215,9 @@ const generalQuestions = [
         question: "Which country hosted the 2020 Summer Olympics (held in 2021)?",
         answers: [
             { text: "China", correct: false },
-            { text: "Japan", correct: true },
+            { text: "Korea", correct: false },
             { text: "Brazil", correct: false },
-            { text: "UK", correct: false }
+            { text: "Japan", correct: true }
         ]
     },
     // 23 Lifestyle
@@ -234,10 +234,10 @@ const generalQuestions = [
     {
         question: "Which country has the Eiffel Tower?",
         answers: [
-            { text: "France", correct: true },
+            { text: "Nigeria", correct: false },
             { text: "Italy", correct: false },
             { text: "Spain", correct: false },
-            { text: "Germany", correct: false }
+            { text: "France", correct: true }
         ]
     },
     // 25 Tech
@@ -254,10 +254,10 @@ const generalQuestions = [
     {
         question: "Who invented the light bulb?",
         answers: [
-            { text: "Thomas Edison", correct: true },
+            { text: "Thomas John", correct: false},
             { text: "Nikola Tesla", correct: false },
             { text: "Alexander Graham Bell", correct: false },
-            { text: "Benjamin Franklin", correct: false }
+            { text: "Thomas Edison", correct: true }
         ]
     },
 
