@@ -72,14 +72,14 @@ function selectAnswer(e){
     }); 
     nextButton.style.display = "block"; // show the next button
 }
+function showQuestion(){
+    resetState();
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionNo = currentQuestionIndex + 1;
 
-function showScore(){
-    resetState(); // reset the state
-    questionElement.innerHTML = ` 🎉Hurray! You scored ${score} out of ${questions.length}! `; // show the score
-    nextButton.innerHTML = " Restart Quiz "; // change next button to restart
-    nextButton.style.display = "block"; // show the next button
+    // ✅ Progress tracker while quiz is running
+    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`;
 
-    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`; // show the progress tracker
 }
  
 function handlenextButton(){
