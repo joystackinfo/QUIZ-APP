@@ -1,33 +1,10 @@
-const questions = [
-    {
-        question: "Which language runs in a web browser?",
-        answers: [
-            { text: "JavaScript", correct: true },
-            { text: "Python", correct: false },
-            { text: "C#", correct: false },
-            { text: "Java", correct: false }
-        ]
-    },
-    {
-        question: "What does CSS stand for?",
-        answers: [
-            { text: "Central Style Sheets", correct: false },
-            { text: "Cascading Style Sheets", correct: true },
-            { text: "Cascading Simple Sheets", correct: false },
-            { text: "Cars SUVs Sailboats", correct: false }
-        ]
-    },
-    {
-        question: "What does HTML stand for?",
-        answers: [
-            { text: "HyperText Markup Language", correct: true },
-            { text: "Hyperlinks and Text Markup Language", correct: false },
-            { text: "Home Tool Markup Language", correct: false },
-            { text: "Hyperlinking Text Marking Language", correct: false }
-        ]
-    }
-];
 
+
+import generalQuestions  from "./generalknowledge.js"; // import questions from generalknowledge.js
+
+let questions = generalQuestions;
+
+console.log(generalQuestions);
 const questionElement = document.getElementById("question"); // get question element
 const answerButtonElement = document.getElementById("answer-button"); // get answers container
 const nextButton = document.getElementById("next-btn"); // get next button
@@ -99,8 +76,10 @@ function selectAnswer(e){
 function showScore(){
     resetState(); // reset the state
     questionElement.innerHTML = ` 🎉Hurray! You scored ${score} out of ${questions.length}! `; // show the score
-    nextButton.innerHTML = "Play Again ";
+    nextButton.innerHTML = " Restart Quiz "; // change next button to restart
     nextButton.style.display = "block"; // show the next button
+
+    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`; // show the progress tracker
 }
  
 function handlenextButton(){
@@ -121,5 +100,8 @@ nextButton.addEventListener("click", () => {
     }
 });
 
+
 // start the quiz when the page loads
 startQuiz();
+console.log(generalQuestions);
+

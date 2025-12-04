@@ -85,7 +85,7 @@ const generalQuestions = [
         question: "Which bird is a universal symbol of peace?",
         answers: [
             { text: "Dove", correct: true },
-            { text: "bird", correct:false },
+            { text: "Swan", correct:false },
             { text: "Owl", correct: false },
             { text: "Parrot", correct: false }
         ]
@@ -261,36 +261,46 @@ const generalQuestions = [
         ]
     },
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // 27 Animal
+{
+    question: "Which animal can sleep standing up?",
+    answers: [
+        { text: "Elephant", correct: false },
+        { text: "Dog", correct: false },
+        { text: "Cat", correct: false },
+        { text: "Horse", correct: true }
+    ]
+},
+// 28 Sport
+{
+    question: "Which sport uses the term 'love' for a score of zero?",
+    answers: [
+        { text: "Volleyball", correct: false },
+        { text: "Badminton", correct: false },
+        { text: "Tennis", correct: true },
+        { text: "Table Tennis", correct: false }
+    ]
+},
+// 29 Lifestyle
+{
+    question: "Which popular social media app was originally created for sharing photos only?",
+    answers: [
+        { text: "Instagram", correct: true },
+        { text: "Twitter", correct: false },
+        { text: "Snapchat", correct: false },
+        { text: "TikTok", correct: false }
+    ]
+},
+// 30 Country
+{
+    question: "Which country is nicknamed 'The Land Down Under'?",
+    answers: [
+        { text: "Argentina", correct: false },
+        { text: "New Zealand", correct: false },
+        { text: "South Africa", correct: false },
+        { text: "Australia", correct: true}
+    ]
+}
 
 ]
 export default generalQuestions;
