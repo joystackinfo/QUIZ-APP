@@ -28,6 +28,8 @@ function showQuestion(){
     const questionNo = currentQuestionIndex + 1; // get the question number
     questionElement.textContent = questionNo + ". " + currentQuestion.question; // display the question and question number
     answerButtonElement.innerHTML = ""; // clear previous answer buttons
+
+    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`;
   
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement("button"); // create a button for each answer
@@ -71,15 +73,6 @@ function selectAnswer(e){
         button.disabled = true; // disable all buttons
     }); 
     nextButton.style.display = "block"; // show the next button
-}
-function showQuestion(){
-    resetState();
-    const currentQuestion = questions[currentQuestionIndex];
-    const questionNo = currentQuestionIndex + 1;
-
-    // ✅ Progress tracker while quiz is running
-    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`;
-
 }
  
 function handlenextButton(){
