@@ -6,10 +6,16 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 
 ## 🚀 Features
  ✅Selection between categories[**Generalknowledge** and **Koreanentertainment**]
+
  ✅Shuffled answer option for each question.
+
  ✅Progress bar to track quiz completion
+
  ✅ Responsive and mobile-friendly design  
- ✅ Notification system for category selection and score display 
+ 
+ ✅ Notification system for category selection and score display
+
+
 
 #### 📸 Screenshot
 ![Homescreen](quizapp-home.png)
