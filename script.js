@@ -1,131 +1,172 @@
-// Import question sets from external files
+// Import question sets
 import generalQuestions from "./generalknowledge.js";
 import koreanentertainmentQuestions from "./koreanentertainment.js";
 
-// Default to general questions
+// Default category
 let questions = generalQuestions;
 
-// Grab DOM elements
-const categorySelectionDiv = document.getElementById('category-selection'); // category screen
-const quizContainerDiv = document.getElementById('quiz-container'); // quiz screen
-const questionElement = document.getElementById("question"); // question text
-const answerButtonElement = document.getElementById("answer-btn"); // answer buttons container
-const nextButton = document.getElementById("next-btn"); // next question button
-const backButton = document.getElementById("back-btn"); // back to categories button
+// DOM elements
+const categorySelectionDiv = document.getElementById('category-selection');
+const quizContainerDiv = document.getElementById('quiz-container');
+const questionElement = document.getElementById('question');
+const answerButtonElement = document.getElementById('answer-btn');
+const nextButton = document.getElementById('next-btn');
+const backButton = document.getElementById('back-btn');
+const progressBar = document.getElementById('progress-bar');
+const scoreNotification = document.getElementById('score-notification');
+const scoreText = document.getElementById('score-text');
+const playAgainBtn = document.getElementById('play-again');
+const changeCategoryBtn = document.getElementById('change-category');
+const notificationDiv = document.getElementById('notification');
 
-// Track quiz state
-let currentQuestionIndex = 0; // current question index
-let score = 0; // player score
+// State
+let currentQuestionIndex = 0;
+let score = 0;
 
-// Start the quiz
+// --- Notification function ---
+function showNotification(message) {
+    if (!notificationDiv) return;
+    notificationDiv.textContent = message;
+    notificationDiv.classList.add("show");
+
+    setTimeout(() => {
+        notificationDiv.classList.remove("show");
+    }, 5000);
+}
+
+// Start quiz
 function startQuiz() {
-    currentQuestionIndex = 0; // reset to first question
-    score = 0; // reset score
-    nextButton.textContent = "Next"; // reset button label
-    quizContainerDiv.style.display = "block"; // show quiz container
-    categorySelectionDiv.style.display = "none"; // hide category selection
-    showQuestion(); // load first question
+    currentQuestionIndex = 0;
+    score = 0;
+    categorySelectionDiv.style.display = 'none';
+    quizContainerDiv.style.display = 'block';
+    nextButton.textContent = "Next";
+    scoreNotification.style.display = 'none';
+
+    showNotification("Quiz started! Good luck!"); // Start notification
+
+    showQuestion();
 }
 
-// Show a question
+// Show question
 function showQuestion() {
-    resetState(); // clear previous state
-    const currentQuestion = questions[currentQuestionIndex]; // get current question
-    const questionNo = currentQuestionIndex + 1; // calculate question number
-    answerButtonElement.innerHTML = ""; // clear old answer buttons
+    resetState();
 
-    // Display question text with progress
-    questionElement.textContent = `Question ${questionNo} of ${questions.length}: ${currentQuestion.question}`;
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElement.style.opacity = 0;
 
-    // Create answer buttons dynamically
-    currentQuestion.answers.forEach(answer => {
-        const button = document.createElement("button"); // create button
-        button.type = "button";
-        button.textContent = answer.text; 
-        button.classList.add("btn"); 
-        if (answer.correct) {
-            button.dataset.correct = answer.correct; // mark correct answer
-        }
-        button.addEventListener("click", selectAnswer); // add click handler
-        answerButtonElement.appendChild(button); // add to container
+    setTimeout(() => {
+        questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
+        questionElement.style.opacity = 1;
+    }, 100);
+
+    const answers = shuffleArray(currentQuestion.answers.slice());
+    answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = answer.text;
+        button.classList.add('btn');
+        if (answer.correct) button.dataset.correct = 'true';
+        button.addEventListener('click', selectAnswer);
+        answerButtonElement.appendChild(button);
     });
+
+    updateProgress();
 }
 
-// Reset state for next question
+// Reset answer buttons
 function resetState() {
-    nextButton.style.display = "none"; // hide next button
+    nextButton.style.display = 'none';
     while (answerButtonElement.firstChild) {
-        answerButtonElement.removeChild(answerButtonElement.firstChild); // remove old buttons
+        answerButtonElement.removeChild(answerButtonElement.firstChild);
     }
 }
 
-// Category button listeners
-document.getElementById("general-btn").addEventListener("click", () => {
-    questions = generalQuestions; // load general questions
-    alert("You picked General Knowledge! Vibe check activated ✨");
-    startQuiz(); // start quiz
-});
+// Shuffle answers
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
 
-document.getElementById("kdrama-btn").addEventListener("click", () => {
-    questions = koreanentertainmentQuestions; // load K-entertainment questions
-    alert("Welcome to K-World! Grab your popcorn 🍿");
-    startQuiz(); // start quiz
-});
+// Update progress bar
+function updateProgress() {
+    const pct = Math.round(((currentQuestionIndex) / questions.length) * 100);
+    if (progressBar) progressBar.style.width = `${pct}%`;
+}
 
-// Handle answer selection
+// Answer selection
 function selectAnswer(e) {
-    const selectBtn = e.target; // selected button
-    const isCorrect = selectBtn.dataset.correct === "true"; // check correctness
+    const selectBtn = e.target;
+    const isCorrect = selectBtn.dataset.correct === 'true';
+
     if (isCorrect) {
-        selectBtn.classList.add("correct"); // highlight correct
-        score++; // increase score
+        selectBtn.classList.add('correct', 'pulse');
+        score++;
     } else {
-        selectBtn.classList.add("incorrect"); // highlight incorrect
+        selectBtn.classList.add('incorrect', 'shake');
     }
 
-    // Show correct answer and disable all buttons
     Array.from(answerButtonElement.children).forEach(button => {
-        if (button.dataset.correct === "true") {
-            button.classList.add("correct");
-        }
-        button.disabled = true; // disable after selection
+        if (button.dataset.correct === 'true') button.classList.add('correct');
+        button.disabled = true;
     });
 
-    nextButton.style.display = "block"; // show next button
+    nextButton.style.display = 'inline-block';
 }
 
-// Handle next button click
-function handlenextButton() {
-    currentQuestionIndex++; // move to next question
+// Next question
+function handleNextButton() {
+    currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
-        showQuestion(); // show next question
+        showQuestion();
     } else {
-        showScore(); // show final score
+        showScore();
     }
 }
 
-// Show final score
+// Show score
 function showScore() {
-    resetState(); // clear old buttons
-    questionElement.textContent = `You scored ${score} out of ${questions.length}! 🎉`; // display score
-    nextButton.textContent = "Play Again"; // change button label
-    nextButton.style.display = "block"; // show play again
-    backButton.style.display = "block"; // show back to categories
+    resetState();
+    scoreText.textContent = `You scored ${score} out of ${questions.length}! 🎉`;
+    scoreNotification.style.display = 'block';
+    if (progressBar) progressBar.style.width = '100%';
+
+    showNotification(`You scored ${score} out of ${questions.length}! 🎉`); // End notification
 }
 
-// Back to categories button
-backButton.addEventListener("click", () => {
-    quizContainerDiv.style.display = "none"; // hide quiz
-    categorySelectionDiv.style.display = "block"; // show categories
-    backButton.style.display = "none"; // hide back button until needed
+// Event listeners
+nextButton.addEventListener('click', handleNextButton);
+
+backButton.addEventListener('click', () => {
+    quizContainerDiv.style.display = 'none';
+    categorySelectionDiv.style.display = 'block';
+    backButton.style.display = 'none';
 });
 
-// Next button listener
-nextButton.addEventListener("click", () => {
-    if (currentQuestionIndex < questions.length) {
-        handlenextButton(); // go to next question
-    } else {
-        startQuiz(); // restart quiz
-    }
+playAgainBtn.addEventListener('click', () => {
+    scoreNotification.style.display = 'none';
+    startQuiz();
 });
 
+changeCategoryBtn.addEventListener('click', () => {
+    scoreNotification.style.display = 'none';
+    quizContainerDiv.style.display = 'none';
+    categorySelectionDiv.style.display = 'block';
+    backButton.style.display = 'none';
+});
+
+// Category selection buttons
+document.getElementById('general-btn').addEventListener('click', () => {
+    questions = generalQuestions;
+    showNotification("You picked General Knowledge!Test your knowledge✨");
+    setTimeout(() => startQuiz(), 500); // small delay so notification shows first
+});
+
+document.getElementById('kdrama-btn').addEventListener('click', () => {
+    questions = koreanentertainmentQuestions;
+    showNotification("Welcome to K-World! Please enjoy the show 🍿");
+    setTimeout(() => startQuiz(), 500);
+});

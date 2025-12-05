@@ -8,25 +8,36 @@
 <body>
   <div class="app">
     <h1>Welcome to Quiz App</h1>
-    <div id="category-container">
-      <div id="category-selection"></div>
+
+    <!-- Notification bar -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Category Section -->
+    <div id="category-selection">
       <h2>Select a Category</h2>
       <button id="general-btn">General Knowledge</button>
       <button id="kdrama-btn">Korean Entertainment</button>
     </div>
-  </div>
 
-  <div id="quiz-container" style="display:none;">
- 
-    <div id="progress"></div>
+    <!-- Quiz Section -->
+    <div id="quiz-container" style="display:none;">
+      <div id="progress-wrap">
+        <div id="progress-bar"></div>
+      </div>
+      <h2 id="question">Test your knowledge!</h2>
+      <div id="answer-btn"></div>
+      <div class="controls">
+        <button id="next-btn" style="display:none;">Next</button>
+        <button id="back-btn" style="display:none;">Back to Categories</button>
+      </div>
+    </div>
 
-    <progress id="progressBar" value="0" max="0"></progress>
-
-    <h2 id="question-text">Test your knowledge!</h2>
-
-    <div id="answer-btn"></div>
-    <button id="next-btn" style="display:none;">Next Question</button>
-    <button id="back-btn" style="display:none;">Back to Categories</button>
+    <!-- Score Notification -->
+    <div id="score-notification" style="display:none;">
+      <p id="score-text"></p>
+      <button id="play-again">Play Again</button>
+      <button id="change-category">Change Category</button>
+    </div>
   </div>
 
   <script type="module" src="script.js"></script>

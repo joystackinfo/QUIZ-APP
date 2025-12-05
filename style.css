@@ -1,119 +1,210 @@
+/* Reset and basic styles */
 * {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
     box-sizing: border-box;
 }
-body{
+
+body {
     background: linear-gradient(135deg, #e986b8, #ae9be1, #a6a0ff);
 }
-.app{
+
+.app {
     background-color: #ffffff;
     width: 90%;
     max-width: 600px;
-    margin:100px auto 0;
+    margin: 100px auto 0;
     border-radius: 10px;
-    padding:30px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
-.app h1{
+
+:root {
+    --primary: #8b1984;
+    --accent: #620668;
+    --text: #222;
+    --success: #1cc264;
+    --danger: #db5d59;
+}
+
+/* Headings */
+.app h1 {
     font-size: 25px;
     color: #4d0d81;
     font-weight: 600;
     border-bottom: 1px solid #333;
     padding-bottom: 30px;
+    margin-bottom: 20px;
 }
-.Quiz{
-    padding: 20px 0;
+
+.app h2 {
+    font-size: 20px;
+    color: #4d0d81;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
-.Quiz h2{
+
+/* Buttons */
+.btn {
+    background-color: #fff;
+    color: var(--text);
+    font-weight: 500;
+    width: 100%;
+    border: 2px solid #222;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.btn:hover:not([disabled]) {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.btn:disabled {
+    cursor: no-drop;
+    opacity: 0.7;
+    filter: grayscale(0.05);
+}
+
+#next-btn {
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    min-width: 110px;
+    font-weight: 600;
+    margin: 20px 8px 0 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: none;
+}
+
+/* Quiz & Question */
+#question {
     font-size: 18px;
     color: #7014bc;
     font-weight: 600;
-}
-.btn{
-    background-color: #dec4c4;
-    color:#222;
-    font-weight: 500;
-    width:100%;
-    border: 2px solid #222;
-    padding:10px;
-     margin:10px;
-     text-align: left;
-     border-radius: 4px;
-     cursor: pointer;
-     transition: all 0.5s ease;
-}
-.btn:active {
-  transform: scale(0.97);
-}
-.btn:hover:not([disabled]){
-    background-color: #8b1984;
-    color:#fff;
-}
-.btn:disabled{
-    cursor: no-drop;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-#next-btn{
-    background-color: #620668;
-    color:#fff;
-    border:none;
-    width: 100px;
-    font-weight: 500;
-    margin: 50px auto 0;
-    padding: 10px;
-    border-radius: 7px;
-    cursor: pointer;
-    display:none;
+#answer-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-@media (max-width: 500px) {
-  .app {
-    width: 95%;
-    margin: 50px auto;
-    padding: 20px;
-  }
-  .btn {
-    font-size: 14px;
-    padding: 8px;
-  }
+
+#answer-btn .btn {
+    width: 90%;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    padding: 14px 16px;
+    font-size: 16px;
 }
-.correct{
-    background-color: #1cc264;
-}
-.incorrect{
-    background-color: #db5d59;
-}
-.correct, .incorrect {
-  transition: background-color 0.3s ease;
-}
+
+/* Category selection */
 #category-selection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 50px;
 }
 
 #category-selection button {
-  background-color: #8b1984;   /* deep purple to match your theme */
-  color: #fff;
-  border: none;
-  padding: 12px 20px;
-  width: 220px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    width: 220px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #category-selection button:hover {
-  background-color: #620668;   /* darker shade on hover */
-  transform: scale(1.05);      /* subtle zoom effect */
+    background-color: var(--accent);
+    transform: scale(1.05);
 }
 
 #category-selection button:active {
-  transform: scale(0.95);      /* pressed effect */
+    transform: scale(0.95);
 }
-.progress-container { position: fixed; top: 0; width: 100%; }
-.question-section { margin-top: 50px; /* Space below fixed bar */ }
+
+/* Progress bar */
+#progress-wrap {
+    height: 8px;
+    width: 100%;
+    background: rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transition: width 400ms ease;
+}
+
+/* Animations */
+.pulse {
+    animation: pulse 700ms ease forwards;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+    100% { transform: scale(1); }
+}
+
+.shake {
+    animation: shake 450ms ease;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+/* Correct / Incorrect colors */
+.correct { background-color: var(--success); }
+.incorrect { background-color: var(--danger); }
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background-color: var(--accent);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    z-index: 1000;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .app { width: 95%; margin: 40px auto; padding: 20px; }
+    #answer-btn .btn { width: 100%; font-size: 15px; }
+}
+/* End of style.css */
