@@ -129,10 +129,3 @@ nextButton.addEventListener("click", () => {
     }
 });
 
-const progressElement = document.getElementById("progress");
-
-// Update progress separately
-progressElement.textContent = `Question ${questionNo} of ${questions.length}`;
-
-// Update question text separately
-questionElement.textContent = currentQuestion.question;
