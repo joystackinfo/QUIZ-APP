@@ -12,14 +12,14 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
  ✅Progress bar to track quiz completion
 
  ✅ Responsive and mobile-friendly design  
- 
+
  ✅ Notification system for category selection and score display
 
 
 
 #### 📸 Screenshot
 ![Homescreen](quizapp-home.png)
-![Koreanknowledge](quiz-app k-knowledge.png)
+![Koreanknowledge](<quiz-app k-knowledge-1.png>)
 ![Generalknowledge](quizapp-general.png)
 
 
