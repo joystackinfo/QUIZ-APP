@@ -43,6 +43,9 @@ body{
      cursor: pointer;
      transition: all 0.5s ease;
 }
+.btn:active {
+  transform: scale(0.97);
+}
 .btn:hover:not([disabled]){
     background-color: #8b1984;
     color:#fff;
@@ -63,9 +66,54 @@ body{
     cursor: pointer;
     display:none;
 }
+@media (max-width: 500px) {
+  .app {
+    width: 95%;
+    margin: 50px auto;
+    padding: 20px;
+  }
+  .btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
 .correct{
     background-color: #1cc264;
 }
 .incorrect{
     background-color: #db5d59;
 }
+.correct, .incorrect {
+  transition: background-color 0.3s ease;
+}
+#category-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 50px;
+}
+
+#category-selection button {
+  background-color: #8b1984;   /* deep purple to match your theme */
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  width: 220px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#category-selection button:hover {
+  background-color: #620668;   /* darker shade on hover */
+  transform: scale(1.05);      /* subtle zoom effect */
+}
+
+#category-selection button:active {
+  transform: scale(0.95);      /* pressed effect */
+}
+.progress-container { position: fixed; top: 0; width: 100%; }
+.question-section { margin-top: 50px; /* Space below fixed bar */ }
