@@ -1,5 +1,4 @@
 
-
 # 📝 QUIZ-APP
 
 A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.Users can select a category,answer multiple-chioce question and see their score at the end.
@@ -16,12 +15,10 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
  ✅ Notification system for category selection and score display
 
 
-
 #### 📸 Screenshot
 ![Homescreen](quizapp-home.png)
 ![Koreanknowledge](<quiz-app k-knowledge-1.png>)
 ![Generalknowledge](quizapp-general.png)
-
 
 
 ## 💻 Tech Stack 
@@ -30,9 +27,8 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 - **CSS3** – Styling, gradients, buttons, animations.
 
 - **JavaScript** (ES6 Modules) – Quiz logic, category selection, progress bar, and notifications.
-
-
-
+ 
+ 
 ## 💡 Usage 🖊️ / Setup
 1. Clone or download the repository.
 
@@ -43,7 +39,6 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 4. Answer the questions by clicking on the options.
 
 5. View your score at the end and choose to Play Again or Change Category.
-
 
 
 ## 📦 Future Enhancements
