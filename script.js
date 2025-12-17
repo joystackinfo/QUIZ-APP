@@ -51,8 +51,8 @@ function startQuiz() {
 function showQuestion() {
     resetState();
 
-    const currentQuestion = questions[currentQuestionIndex];
-    questionElement.style.opacity = 0;
+    const currentQuestion = questions[currentQuestionIndex]; // Get current question
+    questionElement.style.opacity = 0; // Fade out for transition
 
     setTimeout(() => {
         questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
