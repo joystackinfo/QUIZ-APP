@@ -42,7 +42,6 @@ function startQuiz() {
     quizContainerDiv.style.display = 'block';
     nextButton.textContent = "Next";
     scoreNotification.style.display = 'none';
-
     showNotification("Quiz started! Good luck!"); // Start notification
 
     showQuestion();
