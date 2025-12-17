@@ -31,7 +31,7 @@ function showNotification(message) {
 
     setTimeout(() => {
         notificationDiv.classList.remove("show");
-    }, 5000);
+    }, 3000);
 }
 
 // Start quiz
