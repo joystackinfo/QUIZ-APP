@@ -10,13 +10,20 @@ const createScore = async (req, res) => {
             score
         });
 
-        await new score.
+        await new score.save(); // Save new score document to database
 
+        res.status(201).json({
+            message: "Score saved successfully",  
+            data: new score 
+        }); // Respond for created score
 
-    
-    
-    
+    } catch (error) {
+        res.status(500).json({
+            message:"Error saving score",
+            error:error.message
+        }) // Internal Server Error
     }
-
-
-}
+};
+module.exports = {
+    createScore
+};
