@@ -12,9 +12,9 @@ const scoreSchema = new mongoose.Schema({
     score: {
         type: Number,
         required: true
-    },
-     timestamps: true
+    }
+}, {
+    timestamps: true
 });
-
 
 module.exports = mongoose.model('Score', scoreSchema);

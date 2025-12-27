@@ -33,7 +33,7 @@ const getLeaderboard = async (req, res) => {
         const filter = category ? {category} : {}; //filter if there is category in query
 
         const scores = await score.find(filter) // find scores based on filter
-        
+
         .sort({ score: -1})
         .limit(limit);
 
@@ -47,31 +47,12 @@ const getLeaderboard = async (req, res) => {
         res.status(500).json({
             message: 'Error retrieving leaderboard',
             error: error.message
-        })
+        });
     }
-};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 module.exports = {
+    getLeaderboard,
     createScore
 };
