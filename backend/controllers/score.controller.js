@@ -25,14 +25,30 @@ const createScore = async (req, res) => {
     }
 }
 
-const leaderboard = async (req, res) => {
+const getLeaderboard = async (req, res) => {
     try{
+        const {category} = req.query;
+        const limit = 10;
+    
+        const filter = category ? {category} : {}; //filter if there is category in query
+
+        const scores = await score.find(filter) // find scores based on filter
+        
+        .sort({ score: -1})
+        .limit(limit);
+
+        res.status(200).json({
+            message: "Top scores leaderboard retrieved successfully",
+            data: scores
+        });
 
     }
     catch (error) {
-
+        res.status(500).json({
+            message: 'Error retrieving leaderboard',
+            error: error.message
+        })
     }
-
 };
 
 
