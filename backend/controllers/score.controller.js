@@ -23,7 +23,39 @@ const createScore = async (req, res) => {
             error:error.message
         }) // Internal Server Error
     }
+}
+
+const leaderboard = async (req, res) => {
+    try{
+
+    }
+    catch (error) {
+
+    }
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = {
     createScore
 };
