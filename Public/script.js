@@ -73,7 +73,7 @@ function showQuestion() {
         button.classList.add('btn');
         if (answer.correct) button.dataset.correct = 'true';
         button.addEventListener('click', selectAnswer);
-        answerButtonElement.appendChild(button);
+        answerButtonElement.appendChild(button);S
     });
 
     updateProgress();
