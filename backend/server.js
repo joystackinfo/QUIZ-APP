@@ -12,7 +12,9 @@ require('dotenv').config();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api", scoreRoutes); // Use score routes
+
+// Routes
+app.use("/api", scoreRoutes); // Use score routees
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "../public"))); 
