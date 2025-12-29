@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const { createScore } = require('../controllers/score.controller');
+const { createScore , getLeaderboard } = require('../controllers/score.controller');
 
 // Route to create a new score
-router.post("/scores", createScore);
+router.post('/scores', createScore);
 
-
-
-
-
+// Route to get leaderboard
+router.get('/leaderboard', getLeaderboard);
 
 module.exports = router;
