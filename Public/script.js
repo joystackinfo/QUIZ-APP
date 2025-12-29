@@ -4,8 +4,14 @@ import koreanentertainmentQuestions from "./koreanentertainment.js";
 
 // Default category
 let questions = generalQuestions;
+let username = "";
 
 // DOM elements
+//Username elements
+const usernameFormDiv = document.getElementById('username-form');
+const usernameInput = document.getElementById('username-input');
+ 
+//Quiz elements
 const categorySelectionDiv = document.getElementById('category-selection');
 const quizContainerDiv = document.getElementById('quiz-container');
 const questionElement = document.getElementById('question');
@@ -156,6 +162,26 @@ changeCategoryBtn.addEventListener('click', () => {
     categorySelectionDiv.style.display = 'block';
     backButton.style.display = 'none';
 });
+
+
+//Username submission form
+usernameSubmitBtn.addEventListener('click', () => {
+    const inputName = usernameInput.value.trim(); //get input value
+
+    if (inputName === "") {
+        showNotification("Please enter your name to proceed.");
+        return;
+
+    }
+    username = inputName;  // saves the username
+    console.log("Username saved:", username);
+
+    usernameFormDiv.style.display = 'none'; //hide username form
+
+    categorySelectionDiv.style.display = 'block'; //show category selection
+});
+
+
 
 // Category selection buttons
 document.getElementById('general-btn').addEventListener('click', () => {
