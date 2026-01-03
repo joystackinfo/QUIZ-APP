@@ -2,19 +2,19 @@ const score = require('../models/score.model');
 
 const createScore = async (req, res) => {
      try{
-        const { username, category, score } = req.body;
+        const { username, category, points } = req.body;
 
-        const newScore = new score({
+        const newScore = new Score({
             username,
             category,
-            score
+            points
         });
 
-        await new score.save(); // Save new score document to database
+        await newScore.save(); // Save new score document to database
 
         res.status(201).json({
             message: "Score saved successfully",  
-            data: new score 
+            data: newScore
         }); // Respond for created score
 
     } catch (error) {
@@ -33,7 +33,7 @@ const getLeaderboard = async (req, res) => {
 
         const scores = await score.find(filter) // find scores based on filter
 
-        .sort({ score: -1}) // sort by score descending
+        .sort({ point: -1}) // sort by score descending
 
         res.status(200).json({
             message: "Top scores leaderboard retrieved successfully",
