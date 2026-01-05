@@ -134,6 +134,23 @@ function handleNextButton() {
 
 // Show score
 function showScore() {
+    async function sendScoretoBackend() {
+        const points = score * 5; // 5 points per correct answer
+        const category = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment'; // Determine the score according to category
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
     resetState();
     scoreText.textContent = `You scored ${score} out of ${questions.length}! 🎉`;
     scoreNotification.style.display = 'block';
