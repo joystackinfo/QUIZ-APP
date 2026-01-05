@@ -150,18 +150,17 @@ function showScore() {
                     points
                 })
             });
+
+            const data = await response.json(); // get a json response
+            console.log("Score submitted:", data); 
+
+            fetchLeaderboard(category); // Fetch updated leaderboard after submitting score
+
+        } catch (error) {
+            console.error("Error saving score:", error);
+
         }
-
-
-
-
-
-
-
-
-
-
-
+    }
 
     resetState();
     scoreText.textContent = `You scored ${score} out of ${questions.length}! 🎉`;
@@ -169,6 +168,7 @@ function showScore() {
     if (progressBar) progressBar.style.width = '100%';
 
     showNotification(`You scored ${score} out of ${questions.length}! 🎉`); // End notification
+      sendScoretoBackend(); // Send score to backend
 }
 
 // Event listeners
@@ -191,6 +191,26 @@ changeCategoryBtn.addEventListener('click', () => {
     categorySelectionDiv.style.display = 'block';
     backButton.style.display = 'none';
 });
+
+
+//Fetch leaderboard function
+async function fetchLeaderboard() {
+    const category = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
+
+    try{
+        const response = await fetch(`http://localhost:3000/api/scores?category=${category}`);
+        const data = await response.json();
+
+        console.log("Leaderboard data:", data);
+
+        renderLeaderboard(data.data); // Render leaderboard with fetched data
+    }
+    catch (error) {
+        console.error("Error fetching leaderboard:", error);
+    }
+}
+
+
 
 
 //Username submission form
