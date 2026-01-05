@@ -137,8 +137,20 @@ function showScore() {
     async function sendScoretoBackend() {
         const points = score * 5; // 5 points per correct answer
         const category = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment'; // Determine the score according to category
-        
 
+        try{
+            const response = await fetch("http://localhost:3000/api/scores", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username,
+                    category,
+                    points
+                })
+            });
+        }
 
 
 
