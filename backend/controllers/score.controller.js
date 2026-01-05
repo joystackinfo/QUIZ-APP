@@ -2,7 +2,8 @@ const score = require('../models/score.model');
 
 const createScore = async (req, res) => {
      try{
-        const { username, category, points } = req.body;
+        const { username, category, score } = req.body;
+        const points = score * 5 // for every correct answer, 5 points
 
         const newScore = new Score({
             username,
