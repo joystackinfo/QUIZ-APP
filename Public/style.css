@@ -139,13 +139,45 @@ body {
 }
 /* Username form */
 #username-form {
-  min-height: 100vh;
+  min-height: 15vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1rem;
 }
+#username-input {
+  padding: 12px 16px;
+  font-size: 1rem;
+  width: 250px;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+  outline: none;
+}
+
+#username-input:focus {
+  border-color: #7014bc;
+}
+#submit-username {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #622795;
+  color: white;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+#username-submit:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+#username-form h2 {
+    margin-bottom: 0.5rem;
+}
+
+
 
 
 /* Progress bar */
