@@ -137,6 +137,16 @@ body {
 #category-selection button:active {
     transform: scale(0.95);
 }
+/* Username form */
+#username-form {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
 
 /* Progress bar */
 #progress-wrap {
