@@ -10,7 +10,14 @@ let username = "";
 //Username elements
 const usernameFormDiv = document.getElementById('username-form');
 const usernameInput = document.getElementById('username-input');
+const usernameSubmitBtn = document.getElementById('submit-username');
+
  
+//Leaderboard elements
+
+  const leaderboardContainer = document.getElementById('leaderboard-container'); //hide and show board
+  const leaderboardTableBody = document.querySelector('#leaderboard-table tbody'); //Shows where rows wil be inserted
+
 //Quiz elements
 const categorySelectionDiv = document.getElementById('category-selection');
 const quizContainerDiv = document.getElementById('quiz-container');
@@ -73,7 +80,7 @@ function showQuestion() {
         button.classList.add('btn');
         if (answer.correct) button.dataset.correct = 'true';
         button.addEventListener('click', selectAnswer);
-        answerButtonElement.appendChild(button);S
+        answerButtonElement.appendChild(button);
     });
 
     updateProgress();
@@ -209,8 +216,6 @@ async function fetchLeaderboard() {
         console.error("Error fetching leaderboard:", error);
     }
 }
-
-
 
 
 //Username submission form

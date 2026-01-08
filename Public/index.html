@@ -9,11 +9,21 @@
   <div class="app">
     <h1>Welcome to Quiz App</h1>
 
+
+
+    
+    <!-- Username Input -->
+    <div id="username-form" style="display:none;">
+      <h2>Enter Your Name</h2>
+      <input type="text" id="username-input" placeholder="Your Name">
+      <button id="submit-username">Submit</button>
+    </div>
+
     <!-- Notification bar -->
     <div id="notification" class="notification"></div>
 
     <!-- Category Section -->
-    <div id="category-selection">
+    <div id="category-selection" style="display:none;">
       <h2>Select a Category</h2>
       <button id="general-btn">General Knowledge</button>
       <button id="kdrama-btn">Korean Entertainment</button>
@@ -49,12 +59,7 @@
       </table>
      </div>
 
-    <!-- Username Input -->
-    <div id="username-form" style="display:none;">
-      <h2>Enter Your Name</h2>
-      <input type="text" id="username-input" placeholder="Your Name">
-      <button id="submit-username">Submit</button>
-    </div>
+  
 
     <!-- Score Notification -->
     <div id="score-notification" style="display:none;">
