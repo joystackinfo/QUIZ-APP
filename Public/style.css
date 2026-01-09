@@ -154,6 +154,14 @@ body {
   border: 2px solid #ddd;
   outline: none;
 }
+#username-form {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#username-form.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+}
 
 #username-input:focus {
   border-color: #7014bc;
@@ -176,9 +184,6 @@ body {
 #username-form h2 {
     margin-bottom: 0.5rem;
 }
-
-
-
 
 /* Progress bar */
 #progress-wrap {

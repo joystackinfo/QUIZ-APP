@@ -230,8 +230,16 @@ usernameSubmitBtn.addEventListener('click', () => {
     username = inputName;  // saves the username
     console.log("Username saved:", username);
 
-    usernameFormDiv.style.display = 'none'; //hide username form
+   usernameFormDiv.classList.add("hide");
 
+setTimeout(() => {
+  usernameFormDiv.style.display = 'none';
+}, 300);
+
+    usernameInput.disabled = true; //disable input after submission
+
+ username= inputName;  // saves the username
+    console.log("Username saved:", username);
     categorySelectionDiv.style.display = 'block'; //show category selection
 });
 
