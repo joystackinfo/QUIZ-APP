@@ -62,6 +62,8 @@ function startQuiz() {
 
     showQuestion();
 }
+//View leaderboard button
+viewLeaderboardBtn.addEventListener('click', () => {
 
 // Show question
 function showQuestion() {
@@ -228,6 +230,21 @@ async function fetchLeaderboard() {
     }
 }
 
+// Render leaderboard
+function renderLeaderboard(scores) {
+    leaderboardTableBody.innerHTML = ""; // Clear existing rows
+
+    scores.forEach((item, index) => {
+        const row = document.createElement('tr');
+
+        row.innerHTML=`
+            <td>${index + 1}</td> //rank
+            <td>${item.username}</td> // Username
+            <td>${item.points}</td>  //points
+        `;
+        leaderboardTableBody.appendChild(row);
+    });
+}
 
 //Username submission form
 usernameSubmitBtn.addEventListener('click', () => {
