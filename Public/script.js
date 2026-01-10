@@ -172,7 +172,7 @@ function showScore() {
             const data = await response.json(); // get a json response
             console.log("Score submitted:", data); 
 
-            fetchLeaderboard(category); // Fetch updated leaderboard after submitting score
+           // fetchLeaderboard(category); // Fetch updated leaderboard after submitting score
 
         } catch (error) {
             console.error("Error saving score:", error);
