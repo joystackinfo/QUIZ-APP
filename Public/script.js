@@ -63,14 +63,13 @@ function startQuiz() {
     showQuestion();
 }
 //View leaderboard button
-viewLeaderboardBtn.addEventListener('click', () => {viewLeaderboardBtn.addEventListener('click', () => {
+viewLeaderboardBtn.addEventListener('click', () => {
     // Show leaderboard container
     leaderboardContainer.style.display = 'block';
     leaderboardDiv.style.display = 'block';
 
     // Fetch and render leaderboard
     fetchLeaderboard();
-});
 });
 
 // Show question
