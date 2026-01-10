@@ -63,7 +63,15 @@ function startQuiz() {
     showQuestion();
 }
 //View leaderboard button
-viewLeaderboardBtn.addEventListener('click', () => {
+viewLeaderboardBtn.addEventListener('click', () => {viewLeaderboardBtn.addEventListener('click', () => {
+    // Show leaderboard container
+    leaderboardContainer.style.display = 'block';
+    leaderboardDiv.style.display = 'block';
+
+    // Fetch and render leaderboard
+    fetchLeaderboard();
+});
+});
 
 // Show question
 function showQuestion() {
@@ -116,7 +124,7 @@ function updateProgress() {
 
 // Answer selection
 function selectAnswer(e) {
-    const selectBtn = e.target;
+    const selectBtn = e.target; // Selected button
     const isCorrect = selectBtn.dataset.correct === 'true';
 
     if (isCorrect) {
@@ -183,7 +191,7 @@ function showScore() {
     }
 
     resetState();
-    scoreText.textContent = `You scored ${points} points!`;
+    scoreText.textContent = `You scored ${score * 5} points!`;
     scoreNotification.style.display = 'block';
     if (progressBar) progressBar.style.width = '100%';
   showNotification("Quiz completed! Check your score below."); // Completion notification
@@ -238,9 +246,9 @@ function renderLeaderboard(scores) {
         const row = document.createElement('tr');
 
         row.innerHTML=`
-            <td>${index + 1}</td> //rank
-            <td>${item.username}</td> // Username
-            <td>${item.points}</td>  //points
+            <td>${index + 1}</td> 
+            <td>${item.username}</td>
+            <td>${item.points}</td> 
         `;
         leaderboardTableBody.appendChild(row);
     });
