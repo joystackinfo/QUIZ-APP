@@ -17,6 +17,9 @@ const usernameSubmitBtn = document.getElementById('submit-username');
 
   const leaderboardContainer = document.getElementById('leaderboard-container'); //hide and show board
   const leaderboardTableBody = document.querySelector('#leaderboard-table tbody'); //Shows where rows wil be inserted
+  const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
+const leaderboardDiv = document.getElementById('leaderboard');
+
 
 //Quiz elements
 const categorySelectionDiv = document.getElementById('category-selection');
@@ -157,6 +160,14 @@ function showScore() {
                     points
                 })
             });
+            const leaderboardResponse = await fetch(`http://localhost:3000/api/scores?category=${category}`); // Fetch updated leaderboard
+            const leaderboardData = await leaderboardResponse.json();
+            viewLeaderboardBtn.style.display = 'inline-block'; // Show leaderboard button after score submission
+            const allScores = leaderboardData.data;
+
+            const currentUserIndex = allScores.findIndex(item => item.username === username && item.points === points); // Finds the index of the current user 
+            const currentUserRank = currentUserIndex + 1; // Rank is index + 1
+        
 
             const data = await response.json(); // get a json response
             console.log("Score submitted:", data); 
@@ -170,11 +181,11 @@ function showScore() {
     }
 
     resetState();
-    scoreText.textContent = `You scored ${score} out of ${questions.length}! 🎉`;
+    scoreText.textContent = `You scored ${points} points! Your rank is ${currentUserRank}! 🎉`;
     scoreNotification.style.display = 'block';
     if (progressBar) progressBar.style.width = '100%';
-
-    showNotification(`You scored ${score} out of ${questions.length}! 🎉`); // End notification
+  showNotification("Quiz completed! Check your score below."); // Completion notification
+ 
       sendScoretoBackend(); // Send score to backend
 }
 
