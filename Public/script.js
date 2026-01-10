@@ -144,8 +144,8 @@ function handleNextButton() {
 
 // Show score
 function showScore() {
+      const points = score * 5; // 5 points per correct answer
     async function sendScoretoBackend() {
-        const points = score * 5; // 5 points per correct answer
         const category = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment'; // Determine the score according to category
 
         try{
@@ -181,7 +181,7 @@ function showScore() {
     }
 
     resetState();
-    scoreText.textContent = `You scored ${points} points! Your rank is ${currentUserRank}! 🎉`;
+    scoreText.textContent = `You scored ${points} points!`;
     scoreNotification.style.display = 'block';
     if (progressBar) progressBar.style.width = '100%';
   showNotification("Quiz completed! Check your score below."); // Completion notification
