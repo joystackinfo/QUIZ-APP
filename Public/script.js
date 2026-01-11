@@ -149,49 +149,61 @@ function handleNextButton() {
 }
 
 // Show final score and send to backend
+
 function showScore() {
     const points = score * 5; // 5 points per correct answer
+    const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
 
     async function sendScoreToBackend() {
-        const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
-
         try {
-            // 🔹 CHANGED: sending 'score' instead of 'points' to match backend expectation
-            const response = await fetch("http://localhost:3000/api/scores", {
+            // Send score to backend
+            await fetch("http://localhost:3000/api/scores", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     username,
                     category: categoryName,
-                    score // <-- backend expects 'score'
+                    score // backend expects 'score'
                 })
             });
-
-            const data = await response.json();
-            console.log("Score submitted:", data);
 
             // Fetch updated leaderboard
             const leaderboardResponse = await fetch(`http://localhost:3000/api/scores?category=${categoryName}`);
             const leaderboardData = await leaderboardResponse.json();
-            console.log("Leaderboard data:", leaderboardData);
+            const allScores = leaderboardData.data;
 
-            renderLeaderboard(leaderboardData.data); // render leaderboard rows
+            // Sort scores to find user's rank
+            const sortedScores = allScores.sort((a, b) => b.score - a.score);
+            const currentUserIndex = sortedScores.findIndex(item => item.username === username);
+            const currentUserRank = currentUserIndex + 1;
 
-            viewLeaderboardBtn.style.display = 'inline-block'; // show leaderboard button
+            // Show only score + rank
+            scoreText.textContent = `You scored ${points} points! Your rank: ${currentUserRank}`;
+            scoreNotification.style.display = 'block';
+
+            // Hide quiz container and answer buttons
+            quizContainerDiv.style.display = 'none';
+            answerButtonElement.innerHTML = ""; // remove answer buttons
+
+            // Show "View Full Leaderboard" button
+            viewLeaderboardBtn.style.display = 'inline-block';
+
+            // Reset quiz state for next play
+            currentQuestionIndex = 0;
+            score = 0;
 
         } catch (error) {
             console.error("Error saving score:", error);
         }
     }
 
-    resetState();
-    scoreText.textContent = `You scored ${points} points!`;
-    scoreNotification.style.display = 'block';
-    if (progressBar) progressBar.style.width = '100%';
-    showNotification("Quiz completed! Check your score below.");
+    resetState(); // remove last question buttons
+    if (progressBar) progressBar.style.width = '100%'; // fill progress bar
+    showNotification("Quiz completed! Check your score below."); // notification
 
-    sendScoreToBackend(); // send score to backend
+    sendScoreToBackend(); // send score and handle leaderboard
 }
+
 
 // Event listeners
 nextButton.addEventListener('click', handleNextButton);
@@ -238,7 +250,7 @@ function renderLeaderboard(scores) {
         row.innerHTML = `
             <td>${index + 1}</td>
             <td>${item.username}</td>
-            <td>${item.score * 5}</td> <!-- 🔹 CHANGED: multiply score by 5 for display points -->
+            <td>${item.score * 5}</td> 
         `;
         leaderboardTableBody.appendChild(row);
     });
