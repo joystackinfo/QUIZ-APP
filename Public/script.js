@@ -7,16 +7,17 @@ let questions = generalQuestions;
 let username = "";
 
 // DOM elements
-// Username form elements
+// Username form
 const usernameFormDiv = document.getElementById('username-form');
 const usernameInput = document.getElementById('username-input');
 const usernameSubmitBtn = document.getElementById('submit-username');
 
 // Leaderboard elements
-const leaderboardContainer = document.getElementById('leaderboard-container'); // container to hide/show leaderboard
-const leaderboardTableBody = document.querySelector('#leaderboard-table tbody'); // tbody where rows will be inserted
+const leaderboardContainer = document.getElementById('leaderboard-container');
+const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
 const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
 const leaderboardDiv = document.getElementById('leaderboard');
+const leaderboardLoading = document.getElementById('leaderboard-loading'); // NEW: loading message
 
 // Quiz elements
 const categorySelectionDiv = document.getElementById('category-selection');
@@ -41,46 +42,34 @@ function showNotification(message) {
     if (!notificationDiv) return;
     notificationDiv.textContent = message;
     notificationDiv.classList.add("show");
-
-    setTimeout(() => {
-        notificationDiv.classList.remove("show");
-    }, 3000);
+    setTimeout(() => notificationDiv.classList.remove("show"), 3000);
 }
 
-// Start quiz
+// --- Start quiz ---
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
     categorySelectionDiv.style.display = 'none';
     quizContainerDiv.style.display = 'block';
-    nextButton.textContent = "Next"; // Reset next button text
+    nextButton.textContent = "Next";
     scoreNotification.style.display = 'none';
-    showNotification("Quiz started! Good luck!"); // Notify user quiz started
-
+    showNotification("Quiz started! Good luck!");
     showQuestion();
 }
 
-// View leaderboard button click
-viewLeaderboardBtn.addEventListener('click', () => {
-    leaderboardContainer.style.display = 'block'; // show leaderboard container
-    leaderboardDiv.style.display = 'block';       // show leaderboard section
-
-    fetchLeaderboard(); // Fetch and render leaderboard data
-});
-
-// Show question
+// --- Show question ---
 function showQuestion() {
     resetState();
 
-    const currentQuestion = questions[currentQuestionIndex]; // get current question
-    questionElement.style.opacity = 0; // fade out for smooth transition
+    const currentQuestion = questions[currentQuestionIndex];
+    questionElement.style.opacity = 0;
 
     setTimeout(() => {
         questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
         questionElement.style.opacity = 1;
     }, 100);
 
-    const answers = shuffleArray(currentQuestion.answers.slice()); // clone and shuffle answers
+    const answers = shuffleArray(currentQuestion.answers.slice());
     answers.forEach(answer => {
         const button = document.createElement('button');
         button.type = 'button';
@@ -94,7 +83,7 @@ function showQuestion() {
     updateProgress();
 }
 
-// Reset answer buttons for next question
+// --- Reset state for next question ---
 function resetState() {
     nextButton.style.display = 'none';
     while (answerButtonElement.firstChild) {
@@ -102,7 +91,7 @@ function resetState() {
     }
 }
 
-// Shuffle answers array
+// --- Shuffle answers ---
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -111,15 +100,15 @@ function shuffleArray(arr) {
     return arr;
 }
 
-// Update progress bar
+// --- Update progress bar ---
 function updateProgress() {
-    const pct = Math.round(((currentQuestionIndex) / questions.length) * 100);
+    const pct = Math.round((currentQuestionIndex / questions.length) * 100);
     if (progressBar) progressBar.style.width = `${pct}%`;
 }
 
-// Answer selection
+// --- Select answer ---
 function selectAnswer(e) {
-    const selectBtn = e.target; // clicked button
+    const selectBtn = e.target;
     const isCorrect = selectBtn.dataset.correct === 'true';
 
     if (isCorrect) {
@@ -129,16 +118,19 @@ function selectAnswer(e) {
         selectBtn.classList.add('incorrect', 'shake');
     }
 
-    // Show correct answers and disable all buttons
+    // Show correct answers & disable all buttons
     Array.from(answerButtonElement.children).forEach(button => {
         if (button.dataset.correct === 'true') button.classList.add('correct');
         button.disabled = true;
     });
 
     nextButton.style.display = 'inline-block';
+
+    // Save state after each question (NEW)
+    saveQuizState();
 }
 
-// Next question button
+// --- Next question ---
 function handleNextButton() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
@@ -148,64 +140,124 @@ function handleNextButton() {
     }
 }
 
-// Show final score and send to backend
-
+// --- Show final score ---
 function showScore() {
-    const points = score * 5; // 5 points per correct answer
+    const points = score * 5;
     const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
 
     async function sendScoreToBackend() {
         try {
-            // Send score to backend
+            // Submit score
             await fetch("http://localhost:3000/api/scores", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username,
-                    category: categoryName,
-                    score // backend expects 'score'
-                })
+                body: JSON.stringify({ username, category: categoryName, score })
             });
 
-            // Fetch updated leaderboard
-            const leaderboardResponse = await fetch(`http://localhost:3000/api/scores?category=${categoryName}`);
-            const leaderboardData = await leaderboardResponse.json();
-            const allScores = leaderboardData.data;
-
-            // Sort scores to find user's rank
-            const sortedScores = allScores.sort((a, b) => b.score - a.score);
-            const currentUserIndex = sortedScores.findIndex(item => item.username === username);
-            const currentUserRank = currentUserIndex + 1;
-
-            // Show only score + rank
-            scoreText.textContent = `You scored ${points} points! Your rank: ${currentUserRank}`;
+            // Fetch scores only when user clicks leaderboard
+            scoreText.textContent = `You scored ${points} points!`;
             scoreNotification.style.display = 'block';
-
-            // Hide quiz container and answer buttons
             quizContainerDiv.style.display = 'none';
-            answerButtonElement.innerHTML = ""; // remove answer buttons
+            answerButtonElement.innerHTML = "";
 
-            // Show "View Full Leaderboard" button
+            // Show button to view full leaderboard
             viewLeaderboardBtn.style.display = 'inline-block';
-
-            // Reset quiz state for next play
-            currentQuestionIndex = 0;
-            score = 0;
 
         } catch (error) {
             console.error("Error saving score:", error);
         }
     }
 
-    resetState(); // remove last question buttons
-    if (progressBar) progressBar.style.width = '100%'; // fill progress bar
-    showNotification("Quiz completed! Check your score below."); // notification
-
-    sendScoreToBackend(); // send score and handle leaderboard
+    resetState();
+    if (progressBar) progressBar.style.width = '100%';
+    showNotification("Quiz completed! Check your score below.");
+   viewLeaderboardBtn.style.display = 'inline-block';
+    sendScoreToBackend();
 }
 
+// --- Fetch leaderboard ---
+async function fetchLeaderboard() {
+    const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
+    leaderboardLoading.style.display = 'block';
+    leaderboardTableBody.innerHTML = "";
 
-// Event listeners
+    try {
+        const response = await fetch(`http://localhost:3000/api/scores?category=${categoryName}`);
+        const data = await response.json();
+        renderLeaderboard(data.data);
+    } catch (error) {
+        console.error("Error fetching leaderboard:", error);
+        showNotification("Failed to load leaderboard.");
+    } finally {
+        leaderboardLoading.style.display = 'none';
+    }
+}
+
+// --- Render leaderboard ---
+function renderLeaderboard(scores) {
+    leaderboardTableBody.innerHTML = "";
+    const sortedScores = scores.sort((a, b) => b.score - a.score);
+    let userIncluded = false;
+
+    let medal = '';
+if (index === 0) medal = '<span class="medal gold">🥇</span> ';
+else if (index === 1) medal = '<span class="medal silver">🥈</span> ';
+else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
+
+
+    sortedScores.forEach((item, index) => {
+        if (index < 10 || item.username === username) {
+            const row = document.createElement('tr');
+            if (item.username === username) {
+                row.classList.add('current-user');
+                userIncluded = true;
+            }
+            row.innerHTML = `
+                <td>${medal}${index + 1}</td>
+                <td>${item.username}</td>
+                <td>${item.score * 5}</td>
+            `;
+            leaderboardTableBody.appendChild(row);
+        }
+    });
+ // --- Ensure current user is shown ---
+    if (!userIncluded) {
+        const userRow = sortedScores.find(item => item.username === username); // Find user's score
+        if (userRow) {
+            const userRank = sortedScores.findIndex(item => item.username === username) + 1; // Get user's rank
+
+            const row = document.createElement('tr');
+            row.classList.add('current-user');
+            row.innerHTML = `
+                <td>${userRank}</td>
+                <td>${userRow.username}</td>
+                <td>${userRow.score * 5}</td>
+            `;
+            leaderboardTableBody.appendChild(row);
+        }
+    }
+}
+
+// --- Save state to localStorage  ---
+function saveQuizState() {
+    localStorage.setItem('quizState', JSON.stringify({
+        username,
+        currentQuestionIndex,
+        score,
+        category: questions === generalQuestions ? 'general' : 'kdrama'
+    }));
+}
+
+// --- Restore state ---
+const savedState = JSON.parse(localStorage.getItem('quizState'));
+if (savedState) {
+    username = savedState.username;
+    currentQuestionIndex = savedState.currentQuestionIndex;
+    score = savedState.score;
+    questions = savedState.category === 'general' ? generalQuestions : koreanentertainmentQuestions;
+}
+
+// --- Event listeners ---
 nextButton.addEventListener('click', handleNextButton);
 
 backButton.addEventListener('click', () => {
@@ -226,57 +278,29 @@ changeCategoryBtn.addEventListener('click', () => {
     backButton.style.display = 'none';
 });
 
-// Fetch leaderboard
-async function fetchLeaderboard() {
-    const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
+viewLeaderboardBtn.addEventListener('click', () => {
+    leaderboardContainer.style.display = 'block';
+    leaderboardDiv.style.display = 'block';
+    fetchLeaderboard();
+});
 
-    try {
-        const response = await fetch(`http://localhost:3000/api/scores?category=${categoryName}`);
-        const data = await response.json();
-        console.log("Leaderboard data:", data);
-
-        renderLeaderboard(data.data); // render table rows
-    } catch (error) {
-        console.error("Error fetching leaderboard:", error);
-    }
-}
-
-// Render leaderboard table rows
-function renderLeaderboard(scores) {
-    leaderboardTableBody.innerHTML = ""; // clear existing rows
-
-    scores.forEach((item, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${item.username}</td>
-            <td>${item.score * 5}</td> 
-        `;
-        leaderboardTableBody.appendChild(row);
-    });
-}
-
-// Username submission
+// --- Username submission ---
 usernameSubmitBtn.addEventListener('click', () => {
     const inputName = usernameInput.value.trim();
-    if (inputName === "") {
+    if (!inputName) {
         showNotification("Please enter your name to proceed.");
         return;
     }
 
-    username = inputName; // save username
+    username = inputName;
     console.log("Username saved:", username);
-
     usernameFormDiv.classList.add("hide");
-    setTimeout(() => {
-        usernameFormDiv.style.display = 'none';
-    }, 300);
-
-    usernameInput.disabled = true; // disable input
-    categorySelectionDiv.style.display = 'block'; // show category selection
+    setTimeout(() => usernameFormDiv.style.display = 'none', 300);
+    usernameInput.disabled = true;
+    categorySelectionDiv.style.display = 'block';
 });
 
-// Category selection buttons
+// --- Category selection ---
 document.getElementById('general-btn').addEventListener('click', () => {
     questions = generalQuestions;
     showNotification("You picked General Knowledge! Test your knowledge✨");
