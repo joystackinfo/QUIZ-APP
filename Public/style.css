@@ -141,21 +141,27 @@ body {
 #username-form {
   min-height: 15vh;
   display: flex;
+   justify-content: center; 
+   padding: 12px 20px;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 1rem;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+#username-input,
+#submit-username {
+  display: block !important;   /* force block layout */
+  width: 250px;
+  margin: 0 auto;              /* center horizontally */
+}
+
 #username-input {
   padding: 12px 16px;
   font-size: 1rem;
-  width: 250px;
   border-radius: 8px;
   border: 2px solid #ddd;
   outline: none;
-}
-#username-form {
-  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 #username-form.hide {
@@ -170,14 +176,17 @@ body {
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 8px;
+  font-weight: 600;
   border: none;
   cursor: pointer;
   background: #622795;
+  background-color: var(--primary);
   color: white;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-#username-submit:hover {
+#submit-username:hover {
+ background-color: var(--accent);
   transform: scale(1.05);
   opacity: 0.9;
 }

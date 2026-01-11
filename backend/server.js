@@ -13,8 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-app.use("/api", scoreRoutes); // Use score routees
+app.use("/api/scores", scoreRoutes); // Use score routes
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "../public"))); 
