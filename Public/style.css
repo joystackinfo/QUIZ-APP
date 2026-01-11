@@ -324,6 +324,22 @@ body {
 #leaderboard-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+#view-leaderboard-btn {
+    display: none; /* hide initially */
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #ffb700; 
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+#view-leaderboard-btn:hover {
+    transform: scale(1.05);
+}
 
 /* Leaderboard loading overlay (NEW) */
 #leaderboard-loading {
