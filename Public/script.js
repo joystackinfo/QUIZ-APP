@@ -18,8 +18,8 @@ const usernameSubmitBtn = document.getElementById('submit-username');
 const leaderboardContainer = document.getElementById('leaderboard-container');
 const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
 const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
-const leaderboardDiv = document.getElementById('leaderboard');
 const leaderboardLoading = document.getElementById('leaderboard-loading');
+const leaderboardBackButton = document.getElementById('leaderboard-back-btn');
 
 // Quiz
 const categorySelectionDiv = document.getElementById('category-selection');
@@ -27,7 +27,7 @@ const quizContainerDiv = document.getElementById('quiz-container');
 const questionElement = document.getElementById('question');
 const answerButtonElement = document.getElementById('answer-btn');
 const nextButton = document.getElementById('next-btn');
-const backButton = document.getElementById('back-btn');
+const quizBackButton = document.getElementById('quiz-back-btn');
 const progressBar = document.getElementById('progress-bar');
 const scoreNotification = document.getElementById('score-notification');
 const scoreText = document.getElementById('score-text');
@@ -36,276 +36,270 @@ const changeCategoryBtn = document.getElementById('change-category');
 const notificationDiv = document.getElementById('notification');
 
 // --- NOTIFICATION FUNCTION ---
-// Shows a temporary message at the top of the screen
 function showNotification(message) {
-    if (!notificationDiv) return;
-    notificationDiv.textContent = message;
-    notificationDiv.classList.add("show");
-    setTimeout(() => notificationDiv.classList.remove("show"), 3000);
+  if (!notificationDiv) return;
+  notificationDiv.textContent = message;
+  notificationDiv.classList.add("show");
+  setTimeout(() => notificationDiv.classList.remove("show"), 3000);
 }
 
 // --- START QUIZ ---
-// Resets variables and shows the first question
 function startQuiz() {
-    currentQuestionIndex = 0;
-    score = 0;
-    categorySelectionDiv.style.display = 'none';
-    quizContainerDiv.style.display = 'block';
-    nextButton.textContent = "Next";
-    scoreNotification.style.display = 'none';
-    showNotification("Quiz started! Good luck!");
-    showQuestion();
+  currentQuestionIndex = 0;
+  score = 0;
+  categorySelectionDiv.style.display = 'none';
+  quizContainerDiv.style.display = 'block';
+  nextButton.textContent = "Next";
+  scoreNotification.style.display = 'none';
+  showNotification("Quiz started! Good luck!");
+  showQuestion();
 }
 
 // --- SHOW QUESTION ---
-// Populates the question and answer buttons dynamically
 function showQuestion() {
-    resetState(); // Clear previous answers
+  resetState();
+  const currentQuestion = questions[currentQuestionIndex];
+  questionElement.style.opacity = 0;
 
-    const currentQuestion = questions[currentQuestionIndex];
-    questionElement.style.opacity = 0; // Fade animation
+  setTimeout(() => {
+    questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
+    questionElement.style.opacity = 1;
+  }, 100);
 
-    setTimeout(() => {
-        questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
-        questionElement.style.opacity = 1;
-    }, 100);
+  const answers = shuffleArray(currentQuestion.answers.slice());
+  answers.forEach(answer => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = answer.text;
+    button.classList.add('btn', 'answer-btn');
+    if (answer.correct) button.dataset.correct = 'true';
+    button.addEventListener('click', selectAnswer);
+    answerButtonElement.appendChild(button);
+  });
 
-    // Shuffle answers to randomize button order
-    const answers = shuffleArray(currentQuestion.answers.slice());
-    answers.forEach(answer => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = answer.text;
-        button.classList.add('btn', 'answer-btn'); // added class for CSS spacing/centering
-        if (answer.correct) button.dataset.correct = 'true';
-        button.addEventListener('click', selectAnswer);
-        answerButtonElement.appendChild(button);
-    });
-
-    updateProgress();
+  updateProgress();
 }
 
 // --- RESET STATE ---
-// Clears answer buttons and hides the next button
 function resetState() {
-    nextButton.style.display = 'none';
-    answerButtonElement.innerHTML = ''; // Remove all previous buttons
+  nextButton.style.display = 'none';
+  answerButtonElement.innerHTML = '';
 }
 
 // --- SHUFFLE ARRAY ---
-// Fisher-Yates shuffle
 function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 // --- UPDATE PROGRESS BAR ---
 function updateProgress() {
-    const pct = Math.round((currentQuestionIndex / questions.length) * 100);
-    if (progressBar) progressBar.style.width = `${pct}%`;
+  const pct = Math.round((currentQuestionIndex / questions.length) * 100);
+  if (progressBar) progressBar.style.width = `${pct}%`;
 }
 
 // --- SELECT ANSWER ---
-// Handles logic for clicking an answer
 function selectAnswer(e) {
-    const selectBtn = e.target;
-    const isCorrect = selectBtn.dataset.correct === 'true';
+  const selectBtn = e.target;
+  const isCorrect = selectBtn.dataset.correct === 'true';
 
-    if (isCorrect) {
-        selectBtn.classList.add('correct', 'pulse');
-        score++;
-    } else {
-        selectBtn.classList.add('incorrect', 'shake');
-    }
+  if (isCorrect) {
+    selectBtn.classList.add('correct', 'pulse');
+    score++;
+  } else {
+    selectBtn.classList.add('incorrect', 'shake');
+  }
 
-    // Highlight correct answer and disable all buttons
-    Array.from(answerButtonElement.children).forEach(button => {
-        if (button.dataset.correct === 'true') button.classList.add('correct');
-        button.disabled = true;
-    });
+  Array.from(answerButtonElement.children).forEach(button => {
+    if (button.dataset.correct === 'true') button.classList.add('correct');
+    button.disabled = true;
+  });
 
-    nextButton.style.display = 'inline-block';
-    saveQuizState(); // Save after each answer
+  nextButton.style.display = 'inline-block';
+  saveQuizState();
 }
 
 // --- NEXT QUESTION ---
 function handleNextButton() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-        showQuestion();
-    } else {
-        showScore();
-    }
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showScore();
+  }
 }
 
 // --- SHOW FINAL SCORE ---
 function showScore() {
-    const points = score * 5;
-    const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
+  const points = score * 5; // each correct answer = 5 points
+  const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
 
-    async function sendScoreToBackend() {
-        try {
-            await fetch("http://localhost:3000/api/scores", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, category: categoryName, score })
-            });
+  async function sendScoreToBackend() {
+    try {
+      await fetch("http://localhost:3000/api/scores", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, category: categoryName, score: points })
+      });
 
-            scoreText.textContent = `You scored ${points} points!`;
-            scoreNotification.style.display = 'block';
-            quizContainerDiv.style.display = 'none';
-            viewLeaderboardBtn.style.display = 'inline-block';
-            answerButtonElement.innerHTML = ""; // Clear buttons
+      scoreText.textContent = `You scored ${points} points!`;
+      scoreNotification.style.display = 'block';
+      quizContainerDiv.style.display = 'none';
+      viewLeaderboardBtn.style.display = 'inline-block';
+      answerButtonElement.innerHTML = "";
 
-        } catch (error) {
-            console.error("Error saving score:", error);
-        }
+    } catch (error) {
+      console.error("Error saving score:", error);
+      showNotification("Could not save score. Try again.");
     }
+  }
 
-    resetState();
-    if (progressBar) progressBar.style.width = '100%';
-    showNotification("Quiz completed! Check your score below.");
-    sendScoreToBackend();
+  resetState();
+  if (progressBar) progressBar.style.width = '100%';
+  showNotification("Quiz completed! Check your score below.");
+  sendScoreToBackend();
 }
 
 // --- FETCH LEADERBOARD ---
 async function fetchLeaderboard() {
-    const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
-    leaderboardLoading.style.display = 'block';
-    leaderboardTableBody.innerHTML = "";
+  const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
+  if (leaderboardLoading) leaderboardLoading.style.display = 'block';
+  leaderboardTableBody.innerHTML = "";
 
-    try {
-        const response = await fetch(`http://localhost:3000/api/scores?category=${categoryName}`);
-        const data = await response.json();
-        renderLeaderboard(data.data);
-    } catch (error) {
-        console.error("Error fetching leaderboard:", error);
-        showNotification("Failed to load leaderboard.");
-    } finally {
-        leaderboardLoading.style.display = 'none';
-    }
+  try {
+    const response = await fetch(`http://localhost:3000/api/scores?category=${encodeURIComponent(categoryName)}`);
+    const data = await response.json();
+    renderLeaderboard(data.data || []);
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+    showNotification("Failed to load leaderboard.");
+  } finally {
+    if (leaderboardLoading) leaderboardLoading.style.display = 'none';
+  }
 }
 
-// --- RENDER LEADERBOARD ---
+
+// --- RENDER LEADERBOARD --- 
 function renderLeaderboard(scores) {
-    leaderboardTableBody.innerHTML = "";
-    const sortedScores = scores.sort((a, b) => b.score - a.score);
-    let userIncluded = false;
 
-    sortedScores.forEach((item, index) => {
-        let medal = '';
-        if (index === 0) medal = '<span class="medal gold">🥇</span> ';
-        else if (index === 1) medal = '<span class="medal silver">🥈</span> ';
-        else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
+  leaderboardTableBody.innerHTML = "";
+  const sortedScores = scores.sort((a, b) => Number(b.points) - Number(a.points));
+  let userIncluded = false;
 
-        if (index < 10 || item.username === username) {
-            const row = document.createElement('tr');
-            if (item.username === username) {
-                row.classList.add('current-user');
-                userIncluded = true;
-            }
-            row.innerHTML = `
-                <td>${medal}${index + 1}</td>
-                <td>${item.username}</td>
-                <td>${item.score * 5}</td>
-            `;
-            leaderboardTableBody.appendChild(row);
-        }
-    });
+  sortedScores.forEach((item, index) => {
+    let medal = '';
+    if (index === 0) medal = '<span class="medal gold">🥇</span> ';
+    else if (index === 1) medal = '<span class="medal silver">🥈</span> ';
+    else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
 
-    // Ensure current user shows if outside top 10
-    if (!userIncluded) {
-        const userRow = sortedScores.find(item => item.username === username);
-        if (userRow) {
-            const userRank = sortedScores.findIndex(item => item.username === username) + 1;
-            const row = document.createElement('tr');
-            row.classList.add('current-user');
-            row.innerHTML = `
-                <td>${userRank}</td>
-                <td>${userRow.username}</td>
-                <td>${userRow.score * 5}</td>
-            `;
-            leaderboardTableBody.appendChild(row);
-        }
+    if (index < 10 || item.username === username) {
+      const row = document.createElement('tr');
+      if (item.username === username) {
+        row.classList.add('current-user');
+        userIncluded = true;
+      }
+      row.innerHTML = `
+        <td>${medal}${index + 1}</td>
+        <td>${item.username}</td>
+        <td>${Number(item.points)}</td> 
+      `;
+      leaderboardTableBody.appendChild(row);
     }
+  });
+
+  if (!userIncluded) {
+    const userRow = sortedScores.find(item => item.username === username);
+    if (userRow) {
+      const userRank = sortedScores.findIndex(item => item.username === username) + 1;
+      const row = document.createElement('tr');
+      row.classList.add('current-user');
+      row.innerHTML = `
+        <td>${userRank}</td>
+        <td>${userRow.username}</td>
+        <td>${Number(userRow.points)}</td>
+
+      `;
+      leaderboardTableBody.appendChild(row);
+    }
+  }
 }
+
 
 // --- SAVE & RESTORE STATE ---
 function saveQuizState() {
-    localStorage.setItem('quizState', JSON.stringify({
-        username,
-        currentQuestionIndex,
-        score,
-        category: questions === generalQuestions ? 'general' : 'kdrama'
-    }));
+  localStorage.setItem('quizState', JSON.stringify({
+    username,
+    currentQuestionIndex,
+    score,
+    category: questions === generalQuestions ? 'general' : 'kdrama'
+  }));
 }
 
 const savedState = JSON.parse(localStorage.getItem('quizState'));
 if (savedState) {
-    username = savedState.username;
-    currentQuestionIndex = savedState.currentQuestionIndex;
-    score = savedState.score;
-    questions = savedState.category === 'general' ? generalQuestions : koreanentertainmentQuestions;
+  username = savedState.username;
+  currentQuestionIndex = savedState.currentQuestionIndex;
+  score = savedState.score;
+  questions = savedState.category === 'general' ? generalQuestions : koreanentertainmentQuestions;
 }
 
 // --- EVENT LISTENERS ---
-// Navigation buttons
 nextButton.addEventListener('click', handleNextButton);
 
-backButton.addEventListener('click', () => {
-    quizContainerDiv.style.display = 'none';
-    categorySelectionDiv.style.display = 'block';
-    backButton.style.display = 'none';
+quizBackButton.addEventListener('click', () => {
+  quizContainerDiv.style.display = 'none';
+  categorySelectionDiv.style.display = 'block';
+  quizBackButton.style.display = 'none';
 });
 
-// Play again
+leaderboardBackButton.addEventListener('click', () => {
+  leaderboardContainer.style.display = 'none';
+  categorySelectionDiv.style.display = 'block';
+  leaderboardBackButton.style.display = 'none';
+});
+
 playAgainBtn.addEventListener('click', () => {
-    scoreNotification.style.display = 'none';
-    startQuiz();
+  scoreNotification.style.display = 'none';
+  startQuiz();
 });
 
-// Change category
 changeCategoryBtn.addEventListener('click', () => {
-    scoreNotification.style.display = 'none';
-    quizContainerDiv.style.display = 'none';
-    categorySelectionDiv.style.display = 'block';
-    backButton.style.display = 'none';
+  scoreNotification.style.display = 'none';
+  quizContainerDiv.style.display = 'none';
+  categorySelectionDiv.style.display = 'block';
+  quizBackButton.style.display = 'none';
 });
 
-// View leaderboard
 viewLeaderboardBtn.addEventListener('click', () => {
-    leaderboardContainer.style.display = 'block';
-    leaderboardDiv.style.display = 'block';
-    fetchLeaderboard();
+  leaderboardContainer.style.display = 'block';
+  fetchLeaderboard();
 });
 
-// Username form
 usernameSubmitBtn.addEventListener('click', () => {
-    const inputName = usernameInput.value.trim();
-    if (!inputName) {
-        showNotification("Please enter your name to proceed.");
-        return;
-    }
+  const inputName = usernameInput.value.trim();
+  if (!inputName) {
+    showNotification("Please enter your name to proceed.");
+    return;
+  }
 
-    username = inputName;
-    usernameFormDiv.classList.add("hide");
-    setTimeout(() => usernameFormDiv.style.display = 'none', 300);
-    usernameInput.disabled = true;
-    categorySelectionDiv.style.display = 'block';
+  username = inputName;
+  usernameFormDiv.classList.add("hide");
+  setTimeout(() => usernameFormDiv.style.display = 'none', 300);
+  usernameInput.disabled = true;
+  categorySelectionDiv.style.display = 'block';
 });
 
-// Category selection buttons
 document.getElementById('general-btn').addEventListener('click', () => {
-    questions = generalQuestions;
-    showNotification("You picked General Knowledge! Test your knowledge✨");
-    setTimeout(() => startQuiz(), 500);
+  questions = generalQuestions;
+  showNotification("You picked General Knowledge! Test your knowledge✨");
+  setTimeout(() => startQuiz(), 500);
 });
 
 document.getElementById('kdrama-btn').addEventListener('click', () => {
-    questions = koreanentertainmentQuestions;
-    showNotification("Welcome to K-World! Please enjoy the show 🍿");
-    setTimeout(() => startQuiz(), 500);
+  questions = koreanentertainmentQuestions;
+  showNotification("Welcome to K-World! Please enjoy the show 🍿");
+  setTimeout(() => startQuiz(), 500);
 });
