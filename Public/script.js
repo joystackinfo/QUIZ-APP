@@ -1,25 +1,27 @@
-// Import question sets
+// --- IMPORT QUESTION SETS ---
 import generalQuestions from "./generalknowledge.js";
 import koreanentertainmentQuestions from "./koreanentertainment.js";
 
-// Default category
-let questions = generalQuestions;
-let username = "";
+// --- DEFAULTS ---
+let questions = generalQuestions;  // Current category questions
+let username = "";                 // Player name
+let currentQuestionIndex = 0;      // Track which question we’re on
+let score = 0;                     // Track correct answers
 
-// DOM elements
-// Username form
+// --- DOM ELEMENTS ---
+// Username
 const usernameFormDiv = document.getElementById('username-form');
 const usernameInput = document.getElementById('username-input');
 const usernameSubmitBtn = document.getElementById('submit-username');
 
-// Leaderboard elements
+// Leaderboard
 const leaderboardContainer = document.getElementById('leaderboard-container');
 const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
 const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
 const leaderboardDiv = document.getElementById('leaderboard');
-const leaderboardLoading = document.getElementById('leaderboard-loading'); // NEW: loading message
+const leaderboardLoading = document.getElementById('leaderboard-loading');
 
-// Quiz elements
+// Quiz
 const categorySelectionDiv = document.getElementById('category-selection');
 const quizContainerDiv = document.getElementById('quiz-container');
 const questionElement = document.getElementById('question');
@@ -33,11 +35,8 @@ const playAgainBtn = document.getElementById('play-again');
 const changeCategoryBtn = document.getElementById('change-category');
 const notificationDiv = document.getElementById('notification');
 
-// State
-let currentQuestionIndex = 0;
-let score = 0;
-
-// --- Notification function ---
+// --- NOTIFICATION FUNCTION ---
+// Shows a temporary message at the top of the screen
 function showNotification(message) {
     if (!notificationDiv) return;
     notificationDiv.textContent = message;
@@ -45,7 +44,8 @@ function showNotification(message) {
     setTimeout(() => notificationDiv.classList.remove("show"), 3000);
 }
 
-// --- Start quiz ---
+// --- START QUIZ ---
+// Resets variables and shows the first question
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
@@ -57,24 +57,26 @@ function startQuiz() {
     showQuestion();
 }
 
-// --- Show question ---
+// --- SHOW QUESTION ---
+// Populates the question and answer buttons dynamically
 function showQuestion() {
-    resetState();
+    resetState(); // Clear previous answers
 
     const currentQuestion = questions[currentQuestionIndex];
-    questionElement.style.opacity = 0;
+    questionElement.style.opacity = 0; // Fade animation
 
     setTimeout(() => {
         questionElement.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`;
         questionElement.style.opacity = 1;
     }, 100);
 
+    // Shuffle answers to randomize button order
     const answers = shuffleArray(currentQuestion.answers.slice());
     answers.forEach(answer => {
         const button = document.createElement('button');
         button.type = 'button';
         button.textContent = answer.text;
-        button.classList.add('btn');
+        button.classList.add('btn', 'answer-btn'); // added class for CSS spacing/centering
         if (answer.correct) button.dataset.correct = 'true';
         button.addEventListener('click', selectAnswer);
         answerButtonElement.appendChild(button);
@@ -83,15 +85,15 @@ function showQuestion() {
     updateProgress();
 }
 
-// --- Reset state for next question ---
+// --- RESET STATE ---
+// Clears answer buttons and hides the next button
 function resetState() {
     nextButton.style.display = 'none';
-    while (answerButtonElement.firstChild) {
-        answerButtonElement.removeChild(answerButtonElement.firstChild);
-    }
+    answerButtonElement.innerHTML = ''; // Remove all previous buttons
 }
 
-// --- Shuffle answers ---
+// --- SHUFFLE ARRAY ---
+// Fisher-Yates shuffle
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -100,13 +102,14 @@ function shuffleArray(arr) {
     return arr;
 }
 
-// --- Update progress bar ---
+// --- UPDATE PROGRESS BAR ---
 function updateProgress() {
     const pct = Math.round((currentQuestionIndex / questions.length) * 100);
     if (progressBar) progressBar.style.width = `${pct}%`;
 }
 
-// --- Select answer ---
+// --- SELECT ANSWER ---
+// Handles logic for clicking an answer
 function selectAnswer(e) {
     const selectBtn = e.target;
     const isCorrect = selectBtn.dataset.correct === 'true';
@@ -118,19 +121,17 @@ function selectAnswer(e) {
         selectBtn.classList.add('incorrect', 'shake');
     }
 
-    // Show correct answers & disable all buttons
+    // Highlight correct answer and disable all buttons
     Array.from(answerButtonElement.children).forEach(button => {
         if (button.dataset.correct === 'true') button.classList.add('correct');
         button.disabled = true;
     });
 
     nextButton.style.display = 'inline-block';
-
-    // Save state after each question (NEW)
-    saveQuizState();
+    saveQuizState(); // Save after each answer
 }
 
-// --- Next question ---
+// --- NEXT QUESTION ---
 function handleNextButton() {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
@@ -140,28 +141,24 @@ function handleNextButton() {
     }
 }
 
-// --- Show final score ---
+// --- SHOW FINAL SCORE ---
 function showScore() {
     const points = score * 5;
     const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
 
     async function sendScoreToBackend() {
         try {
-            // Submit score
             await fetch("http://localhost:3000/api/scores", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, category: categoryName, score })
             });
 
-            // Fetch scores only when user clicks leaderboard
             scoreText.textContent = `You scored ${points} points!`;
             scoreNotification.style.display = 'block';
             quizContainerDiv.style.display = 'none';
-            answerButtonElement.innerHTML = "";
-
-            // Show button to view full leaderboard
             viewLeaderboardBtn.style.display = 'inline-block';
+            answerButtonElement.innerHTML = ""; // Clear buttons
 
         } catch (error) {
             console.error("Error saving score:", error);
@@ -171,11 +168,10 @@ function showScore() {
     resetState();
     if (progressBar) progressBar.style.width = '100%';
     showNotification("Quiz completed! Check your score below.");
-   viewLeaderboardBtn.style.display = 'inline-block';
     sendScoreToBackend();
 }
 
-// --- Fetch leaderboard ---
+// --- FETCH LEADERBOARD ---
 async function fetchLeaderboard() {
     const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
     leaderboardLoading.style.display = 'block';
@@ -193,19 +189,18 @@ async function fetchLeaderboard() {
     }
 }
 
-// --- Render leaderboard ---
+// --- RENDER LEADERBOARD ---
 function renderLeaderboard(scores) {
     leaderboardTableBody.innerHTML = "";
     const sortedScores = scores.sort((a, b) => b.score - a.score);
     let userIncluded = false;
 
-    let medal = '';
-if (index === 0) medal = '<span class="medal gold">🥇</span> ';
-else if (index === 1) medal = '<span class="medal silver">🥈</span> ';
-else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
-
-
     sortedScores.forEach((item, index) => {
+        let medal = '';
+        if (index === 0) medal = '<span class="medal gold">🥇</span> ';
+        else if (index === 1) medal = '<span class="medal silver">🥈</span> ';
+        else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
+
         if (index < 10 || item.username === username) {
             const row = document.createElement('tr');
             if (item.username === username) {
@@ -220,12 +215,12 @@ else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
             leaderboardTableBody.appendChild(row);
         }
     });
- // --- Ensure current user is shown ---
-    if (!userIncluded) {
-        const userRow = sortedScores.find(item => item.username === username); // Find user's score
-        if (userRow) {
-            const userRank = sortedScores.findIndex(item => item.username === username) + 1; // Get user's rank
 
+    // Ensure current user shows if outside top 10
+    if (!userIncluded) {
+        const userRow = sortedScores.find(item => item.username === username);
+        if (userRow) {
+            const userRank = sortedScores.findIndex(item => item.username === username) + 1;
             const row = document.createElement('tr');
             row.classList.add('current-user');
             row.innerHTML = `
@@ -238,7 +233,7 @@ else if (index === 2) medal = '<span class="medal bronze">🥉</span> ';
     }
 }
 
-// --- Save state to localStorage  ---
+// --- SAVE & RESTORE STATE ---
 function saveQuizState() {
     localStorage.setItem('quizState', JSON.stringify({
         username,
@@ -248,7 +243,6 @@ function saveQuizState() {
     }));
 }
 
-// --- Restore state ---
 const savedState = JSON.parse(localStorage.getItem('quizState'));
 if (savedState) {
     username = savedState.username;
@@ -257,7 +251,8 @@ if (savedState) {
     questions = savedState.category === 'general' ? generalQuestions : koreanentertainmentQuestions;
 }
 
-// --- Event listeners ---
+// --- EVENT LISTENERS ---
+// Navigation buttons
 nextButton.addEventListener('click', handleNextButton);
 
 backButton.addEventListener('click', () => {
@@ -266,11 +261,13 @@ backButton.addEventListener('click', () => {
     backButton.style.display = 'none';
 });
 
+// Play again
 playAgainBtn.addEventListener('click', () => {
     scoreNotification.style.display = 'none';
     startQuiz();
 });
 
+// Change category
 changeCategoryBtn.addEventListener('click', () => {
     scoreNotification.style.display = 'none';
     quizContainerDiv.style.display = 'none';
@@ -278,13 +275,14 @@ changeCategoryBtn.addEventListener('click', () => {
     backButton.style.display = 'none';
 });
 
+// View leaderboard
 viewLeaderboardBtn.addEventListener('click', () => {
     leaderboardContainer.style.display = 'block';
     leaderboardDiv.style.display = 'block';
     fetchLeaderboard();
 });
 
-// --- Username submission ---
+// Username form
 usernameSubmitBtn.addEventListener('click', () => {
     const inputName = usernameInput.value.trim();
     if (!inputName) {
@@ -293,14 +291,13 @@ usernameSubmitBtn.addEventListener('click', () => {
     }
 
     username = inputName;
-    console.log("Username saved:", username);
     usernameFormDiv.classList.add("hide");
     setTimeout(() => usernameFormDiv.style.display = 'none', 300);
     usernameInput.disabled = true;
     categorySelectionDiv.style.display = 'block';
 });
 
-// --- Category selection ---
+// Category selection buttons
 document.getElementById('general-btn').addEventListener('click', () => {
     questions = generalQuestions;
     showNotification("You picked General Knowledge! Test your knowledge✨");
