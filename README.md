@@ -22,28 +22,8 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 
 #### 📸 Screenshot
 ![Homescreen] (quizapp-home.png)
-![Koreanknowledge] (<quiz-app k-knowledge-1.png>)
+![Koreanknowledge](<quiz-app k-knowledge-1.png>)
 ![Generalknowledge] (quizapp-general.png)
-
-# 📂 Project Structure
-Quiz-App/
-├── public/
-│   ├── index.html              
-│   ├── style.css               
-│   ├── script.js               
-│   ├── generalknowledge.js     
-│   └── koreanentertainment.js  
-│
-├── backend/                    
-│   ├── controllers/  
-      
-│   ├── models/                 
-│   ├── routes/              
-│   ├── .env                    
-│   └── server.js               
-│
-└── README.md                   
-
 
 ## 💻 Tech Stack 
 - **HTML5** – Structure of the app.
