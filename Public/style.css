@@ -249,10 +249,8 @@ body {
 .notification.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-}
-
-/* Action buttons (Play again / change category / leaderboard) */
-#play-again, #change-category, #view-leaderboard-btn {
+} 
+#play-again, #change-category, #view-leaderboard-btn, #quiz-back-btn{
 
     display: none;
     padding: 10px 20px;
@@ -265,7 +263,22 @@ body {
     transition: all 0.3s ease;
 }
 
-#play-again:hover, #change-category:hover, #view-leaderboard-btn:hover {
+#play-again:hover, #change-category:hover, #view-leaderboard-btn:hover, #quiz-back-btn:hover {
+    background-color: var(--accent);
+    transform: scale(1.05);
+}
+#quiz-back-btn {
+    padding: 10px 20px;
+    margin: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#quiz-back-btn:hover {
     background-color: var(--accent);
     transform: scale(1.05);
 }

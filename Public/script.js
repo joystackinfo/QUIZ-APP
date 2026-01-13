@@ -132,6 +132,13 @@ function handleNextButton() {
   }
 }
 
+function showScoreActions() {
+  playAgainBtn.style.display = 'inline-block';
+  changeCategoryBtn.style.display = 'inline-block';
+  viewLeaderboardBtn.style.display = 'inline-block';
+  leaderboardBackButton.style.display = 'none';
+} // end showScoreActions
+
 // --- SHOW FINAL SCORE ---
 function showScore() {
   const points = score * 5; // each correct answer = 5 points
@@ -150,8 +157,9 @@ function showScore() {
       scoreText.textContent = `You scored ${points} points!`;
       scoreNotification.style.display = 'block';
       quizContainerDiv.style.display = 'none';
-      viewLeaderboardBtn.style.display = 'inline-block';
       answerButtonElement.innerHTML = "";
+
+      showScoreActions();
 
     } catch (error) {
       console.error("Error saving score:", error);
@@ -259,8 +267,9 @@ quizBackButton.addEventListener('click', () => {
 
 leaderboardBackButton.addEventListener('click', () => {
   leaderboardContainer.style.display = 'none';
-  categorySelectionDiv.style.display = 'block';
-  leaderboardBackButton.style.display = 'none';
+  scoreNotification.style.display = 'block'; // return to score view
+ 
+   showScoreActions();
 });
 
 playAgainBtn.addEventListener('click', () => {
@@ -277,11 +286,18 @@ changeCategoryBtn.addEventListener('click', () => {
 
 viewLeaderboardBtn.addEventListener('click', () => {
   leaderboardContainer.style.display = 'block';
+  scoreNotification.style.display = 'none';
+
+  playAgainBtn.style.display = 'none';
+  changeCategoryBtn.style.display = 'none';
+  viewLeaderboardBtn.style.display = 'none';
+  leaderboardBackButton.style.display = 'inline-block';
+
   fetchLeaderboard();
 });
 
 usernameSubmitBtn.addEventListener('click', () => {
-  const inputName = usernameInput.value.trim();
+  const inputName = usernameInput.value.trim(); 
   if (!inputName) {
     showNotification("Please enter your name to proceed.");
     return;
