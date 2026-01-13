@@ -21,9 +21,9 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 
 
 #### 📸 Screenshot
-![Homescreen](quizapp-home.png)
-![Koreanknowledge](<quiz-app k-knowledge-1.png>)
-![Generalknowledge](quizapp-general.png)
+![Homescreen] (quizapp-home.png)
+![Koreanknowledge] (<quiz-app k-knowledge-1.png>)
+![Generalknowledge] (quizapp-general.png)
 
 # 📂 Project Structure
 Quiz-App/
