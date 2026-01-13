@@ -142,7 +142,9 @@ function showScore() {
       await fetch("http://localhost:3000/api/scores", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, category: categoryName, score: points })
+        body: JSON.stringify({ username,
+           category: categoryName,
+            points: points })
       });
 
       scoreText.textContent = `You scored ${points} points!`;

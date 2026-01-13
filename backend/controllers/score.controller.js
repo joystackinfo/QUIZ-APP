@@ -3,8 +3,7 @@ const Score = require('../models/score.model');
 // --- CREATE SCORE ---
 const createScore = async (req, res) => {
   try {
-    const { username, category, score } = req.body; // score = correct answers from frontend
-    let points = score;
+    const { username, category, points } = req.body; // points = correct answers from frontend
 
      if (points > 150) {
       points = 150;
