@@ -27,21 +27,22 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 
 # 📂 Project Structure
 Quiz-App/
-├── public/                     # Frontend files
-│   ├── index.html              # Main HTML file
-│   ├── style.css               # App styling
-│   ├── script.js               # Main JavaScript logic
-│   ├── generalknowledge.js     # General knowledge questions
-│   └── koreanentertainment.js  # Korean entertainment questions
+├── public/
+│   ├── index.html              
+│   ├── style.css               
+│   ├── script.js               
+│   ├── generalknowledge.js     
+│   └── koreanentertainment.js  
 │
-├── backend/                    # Backend files
-│   ├── controllers/            # Controller logic (handling API requests)
-│   ├── models/                 # MongoDB models (Score schema)
-│   ├── routes/                 # API routes
-│   ├── .env                    # Environment variables
-│   └── server.js               # Main backend server
+├── backend/                    
+│   ├── controllers/  
+      
+│   ├── models/                 
+│   ├── routes/              
+│   ├── .env                    
+│   └── server.js               
 │
-└── README.md                   # Project documentation
+└── README.md                   
 
 
 ## 💻 Tech Stack 
