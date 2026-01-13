@@ -27,9 +27,10 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 
 # 📂 Project Structure
 Quiz-App/
-├── public/                     # Frontend files
-│   ├── index.html              # Main HTML file
-│   ├── style.css               # App styling
+
+├── public/  # Frontend files
+│    ├── index.html              
+│   ├── style.css                # App styling
 │   ├── script.js               # Main JavaScript logic
 │   ├── generalknowledge.js     # General knowledge questions
 │   └── koreanentertainment.js  # Korean entertainment questions
