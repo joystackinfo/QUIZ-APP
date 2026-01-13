@@ -19,6 +19,8 @@ const leaderboardContainer = document.getElementById('leaderboard-container');
 const leaderboardTableBody = document.querySelector('#leaderboard-table tbody');
 const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
 const leaderboardLoading = document.getElementById('leaderboard-loading');
+
+// Use the existing quiz-back-btn as the "Back" button for leaderboard
 const leaderboardBackButton = document.getElementById('leaderboard-back-btn');
 
 // Quiz
@@ -27,12 +29,15 @@ const quizContainerDiv = document.getElementById('quiz-container');
 const questionElement = document.getElementById('question');
 const answerButtonElement = document.getElementById('answer-btn');
 const nextButton = document.getElementById('next-btn');
-const quizBackButton = document.getElementById('quiz-back-btn');
 const progressBar = document.getElementById('progress-bar');
+
+// Score & actions
 const scoreNotification = document.getElementById('score-notification');
 const scoreText = document.getElementById('score-text');
 const playAgainBtn = document.getElementById('play-again');
 const changeCategoryBtn = document.getElementById('change-category');
+
+// Notification
 const notificationDiv = document.getElementById('notification');
 
 // --- NOTIFICATION FUNCTION ---
@@ -49,7 +54,7 @@ function startQuiz() {
   score = 0;
   categorySelectionDiv.style.display = 'none';
   quizContainerDiv.style.display = 'block';
-  nextButton.textContent = "Next";
+  nextButton.style.display = 'none';
   scoreNotification.style.display = 'none';
   showNotification("Quiz started! Good luck!");
   showQuestion();
@@ -132,16 +137,19 @@ function handleNextButton() {
   }
 }
 
+// --- SHOW SCORE ACTION BUTTONS ---
+//Ensures Play Again / Change Category / View Leaderboard are visible after score
+//Hides the Back button when returning to score screen
 function showScoreActions() {
   playAgainBtn.style.display = 'inline-block';
   changeCategoryBtn.style.display = 'inline-block';
   viewLeaderboardBtn.style.display = 'inline-block';
-  leaderboardBackButton.style.display = 'none';
-} // end showScoreActions
+  leaderboardBackButton.style.display = 'none'; 
+}
 
 // --- SHOW FINAL SCORE ---
 function showScore() {
-  const points = score * 5; // each correct answer = 5 points
+  const points = score * 5;
   const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
 
   async function sendScoreToBackend() {
@@ -149,9 +157,11 @@ function showScore() {
       await fetch("http://localhost:3000/api/scores", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username,
-           category: categoryName,
-            points: points })
+        body: JSON.stringify({
+          username,
+          category: categoryName,
+          points: points
+        })
       });
 
       scoreText.textContent = `You scored ${points} points!`;
@@ -159,7 +169,7 @@ function showScore() {
       quizContainerDiv.style.display = 'none';
       answerButtonElement.innerHTML = "";
 
-      showScoreActions();
+      showScoreActions(); // Show Play Again / Change Category / View Leaderboard
 
     } catch (error) {
       console.error("Error saving score:", error);
@@ -176,7 +186,7 @@ function showScore() {
 // --- FETCH LEADERBOARD ---
 async function fetchLeaderboard() {
   const categoryName = questions === generalQuestions ? 'General Knowledge' : 'Korean Entertainment';
-  if (leaderboardLoading) leaderboardLoading.style.display = 'block';
+  leaderboardLoading.style.display = 'block';
   leaderboardTableBody.innerHTML = "";
 
   try {
@@ -187,14 +197,12 @@ async function fetchLeaderboard() {
     console.error("Error fetching leaderboard:", error);
     showNotification("Failed to load leaderboard.");
   } finally {
-    if (leaderboardLoading) leaderboardLoading.style.display = 'none';
+    leaderboardLoading.style.display = 'none';
   }
 }
 
-
-// --- RENDER LEADERBOARD --- 
+// --- RENDER LEADERBOARD ---
 function renderLeaderboard(scores) {
-
   leaderboardTableBody.innerHTML = "";
   const sortedScores = scores.sort((a, b) => Number(b.points) - Number(a.points));
   let userIncluded = false;
@@ -230,13 +238,11 @@ function renderLeaderboard(scores) {
         <td>${userRank}</td>
         <td>${userRow.username}</td>
         <td>${Number(userRow.points)}</td>
-
       `;
       leaderboardTableBody.appendChild(row);
     }
   }
 }
-
 
 // --- SAVE & RESTORE STATE ---
 function saveQuizState() {
@@ -259,31 +265,28 @@ if (savedState) {
 // --- EVENT LISTENERS ---
 nextButton.addEventListener('click', handleNextButton);
 
-quizBackButton.addEventListener('click', () => {
-  quizContainerDiv.style.display = 'none';
-  categorySelectionDiv.style.display = 'block';
-  quizBackButton.style.display = 'none';
-});
-
+//  Back button returns from leaderboard to score view
 leaderboardBackButton.addEventListener('click', () => {
   leaderboardContainer.style.display = 'none';
-  scoreNotification.style.display = 'block'; // return to score view
- 
-   showScoreActions();
+  scoreNotification.style.display = 'block';
+  showScoreActions(); // restores Play Again, Change Category, View Full Leaderboard
 });
 
+// Play again
 playAgainBtn.addEventListener('click', () => {
   scoreNotification.style.display = 'none';
   startQuiz();
 });
 
+// Change category
 changeCategoryBtn.addEventListener('click', () => {
   scoreNotification.style.display = 'none';
   quizContainerDiv.style.display = 'none';
   categorySelectionDiv.style.display = 'block';
-  quizBackButton.style.display = 'none';
+  leaderboardBackButton.style.display = 'none';
 });
 
+// View full leaderboard
 viewLeaderboardBtn.addEventListener('click', () => {
   leaderboardContainer.style.display = 'block';
   scoreNotification.style.display = 'none';
@@ -291,11 +294,12 @@ viewLeaderboardBtn.addEventListener('click', () => {
   playAgainBtn.style.display = 'none';
   changeCategoryBtn.style.display = 'none';
   viewLeaderboardBtn.style.display = 'none';
-  leaderboardBackButton.style.display = 'inline-block';
 
+  leaderboardBackButton.style.display = 'inline-block'; // ✅ Show back button
   fetchLeaderboard();
 });
 
+// Username submit
 usernameSubmitBtn.addEventListener('click', () => {
   const inputName = usernameInput.value.trim(); 
   if (!inputName) {
@@ -310,6 +314,7 @@ usernameSubmitBtn.addEventListener('click', () => {
   categorySelectionDiv.style.display = 'block';
 });
 
+// Category selection
 document.getElementById('general-btn').addEventListener('click', () => {
   questions = generalQuestions;
   showNotification("You picked General Knowledge! Test your knowledge✨");

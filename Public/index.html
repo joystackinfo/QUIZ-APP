@@ -36,13 +36,27 @@
       <div id="answer-btn"></div>
       <div class="controls">
         <button id="next-btn" style="display:none;">Next</button>
-        <!-- Back button for quiz -->
-        <button id="quiz-back-btn" style="display:none;">Back to Categories</button>
+        <!-- Quiz Back button -->
+        <button id="quiz-back-btn" style="display:none;">Back</button>
       </div>
     </div>
 
+    <!-- Score Notification & Actions -->
+    <div id="score-notification" style="display:none;">
+      <p id="score-text"></p>
+      <div style="display:flex; justify-content:center; gap:10px; flex-wrap: wrap;">
+        <button id="play-again">Play Again</button>
+        <button id="change-category">Change Category</button>
+      </div>
+    </div>
+
+    <!-- View Full Leaderboard -->
+    <div style="text-align:center; margin-top: 15px;">
+      <button id="view-leaderboard-btn">View Full Leaderboard</button>
+    </div>
+
     <!-- Leaderboard container -->
-    <div id="leaderboard-container" style="display:none;">
+    <div id="leaderboard-container" style="display:none; margin-top: 20px;">
       <h2>Leaderboard</h2>
       <table id="leaderboard-table">
         <thead>
@@ -54,25 +68,16 @@
         </thead>
         <tbody></tbody>
       </table>
+
+      <!-- Leaderboard back button -->
+      <div style="text-align:center; margin-top: 15px;">
+        <button id="leaderboard-back-btn" style="display:none;">Back</button>
+      </div>
     </div>
 
     <!-- Loading indicator -->
     <div id="leaderboard-loading" style="display:none;">Loading...</div>
-
-    <!-- Back button for leaderboard -->
-    <button id="leaderboard-back-btn" style="display:none;">Back to Categories</button>
-
-    <!-- Score Notification -->
-    <div id="score-notification" style="display:none;">
-      <p id="score-text"></p>
-      <button id="play-again">Play Again</button>
-      <button id="change-category">Change Category</button>
-    </div>
-  </div>
-
-  <!-- Leaderboard button -->
-  <div style="text-align:center; margin-top: 10px;">
-    <button id="view-leaderboard-btn">View Full Leaderboard</button>
+    
   </div>
 
   <script type="module" src="script.js"></script>

@@ -7,7 +7,7 @@
 }
 
 body {
-    background: linear-gradient(135deg, #e986b8, #ae9be1, #a6a0ff);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
 }
 
 .app {
@@ -249,38 +249,46 @@ body {
 .notification.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-} 
-#play-again, #change-category, #view-leaderboard-btn, #quiz-back-btn{
-
-    display: none;
-    padding: 10px 20px;
-    margin: 10px 20px;
+}
+/* Score & action buttons (Play Again, Change Category, View Full Leaderboard, Back) */
+#play-again, 
+#change-category, 
+#view-leaderboard-btn, 
+#leaderboard-back-btn {
+    display: none; /* hidden by default, JS will toggle */
+    padding: 12px 24px;
+    margin: 10px 0; /* vertical spacing */
     border-radius: 8px;
     font-weight: 600;
     background-color: var(--primary);
     color: #fff;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-width: 180px;
+    text-align: center;
 }
 
-#play-again:hover, #change-category:hover, #view-leaderboard-btn:hover, #quiz-back-btn:hover {
+#play-again:hover, 
+#change-category:hover, 
+#view-leaderboard-btn:hover, 
+#leaderboard-back-btn:hover {
     background-color: var(--accent);
     transform: scale(1.05);
 }
-#quiz-back-btn {
-    padding: 10px 20px;
-    margin: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    background-color: var(--primary);
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.3s ease;
+
+/* Leaderboard container setup */
+#leaderboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center everything horizontally */
+    position: relative; /* buttons inside are positioned */
+    gap: 10px; /* spacing between table & button */
+    padding: 10px 0;
 }
 
-#quiz-back-btn:hover {
-    background-color: var(--accent);
-    transform: scale(1.05);
+/* Back button specifically */
+#leaderboard-back-btn {
+    z-index: 20; /* ensures it sits above table or overlays if needed */
 }
 
 /* Score notification */
