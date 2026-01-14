@@ -13,7 +13,7 @@ const createScore = async (req, res) => {
     }   
   
  const normalizedUsername = username.trim().toLowerCase(); // normalize username
- 
+
     // check if it exists already in this category
 const exists = await Score.findOne({ username: normalizedUsername, category });
 if (exists) {
