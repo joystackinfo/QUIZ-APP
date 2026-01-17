@@ -195,6 +195,7 @@ async function fetchLeaderboard() {
 }
 
 // --- RENDER LEADERBOARD ---
+function renderLeaderboard(scores) {
   leaderboardTableBody.innerHTML = "";
   const sortedScores = scores.sort((a, b) => Number(b.points) - Number(a.points));
   let userIncluded = false;
