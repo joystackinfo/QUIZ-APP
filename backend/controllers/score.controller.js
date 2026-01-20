@@ -55,7 +55,7 @@ if (exists) {
 const getLeaderboard = async (req, res) => {
   try {
     const { category } = req.query;
-    const match = category ? { category } : 
+    const match = category ? { category } : {};
 
     const scores = await Score.aggregate([
       { $match: match },
