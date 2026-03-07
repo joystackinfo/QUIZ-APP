@@ -18,7 +18,6 @@ app.use("/api/scores", scoreRoutes); // Use score routes
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "../public"))); 
 
-
 // Test route
 app.get("/api/test", (req, res) => {
     res.json({ message: "Backend is working!" });
