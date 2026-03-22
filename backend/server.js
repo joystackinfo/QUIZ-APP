@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const cors = require("cors"); 
 const scoreRoutes = require('./routes/score.route');
+const questionRoutes = require('./routes/question.route');
 
 const mongoose = require('mongoose');
 const app = express()
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/scores", scoreRoutes); // Use score routes
+
+app.use("/api/questions", questionRoutes); // Use question routes
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "../public"))); 
