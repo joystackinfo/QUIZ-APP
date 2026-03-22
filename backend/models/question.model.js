@@ -7,7 +7,7 @@ const answerSchema = new mongoose.Schema({
 const questionSchema = new mongoose.Schema({
     category: String,
     question: String,
-    answer: [answerSchema], // Array of answer objects
+    answers: [answerSchema], // Array of answer objects
     explanation: String
 })
 
