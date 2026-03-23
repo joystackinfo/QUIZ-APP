@@ -182,4 +182,4 @@ const literatureQuestions = [
 
 ]
 
-export default literatureQuestions;
+module.exports = literatureQuestions;

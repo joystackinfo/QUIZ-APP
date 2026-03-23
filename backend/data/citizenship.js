@@ -181,5 +181,5 @@ const citizenshipQuestions = [
 }
 
 ]
-
-export default citizenshipQuestions;
+ 
+module.exports = citizenshipQuestions;

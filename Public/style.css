@@ -339,6 +339,9 @@ body {
     color: #fff;
     display: inline-block;
 }
+.hide {
+    display: none;
+}
 
 .gold { background-color: #FFD700; }
 .silver { background-color: #C0C0C0; }

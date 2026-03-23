@@ -45,7 +45,26 @@ function showNotification(message) {
   }, 3000)
 
 }
+// --- FETCH QUESTIONS FROM BACKEND ---
+async function fetchQuestionsAndStart() {
+  try {
+    const response = await fetch(`/api/questions?category=${selectedCategory}`)
+    const data = await response.json()
 
+    questions = data
+
+    if (!questions.length) {
+      showNotification("No questions found for this category ")
+      return
+    }
+
+    startQuiz()
+
+  } catch (error) {
+    console.error("Fetch error:", error)
+    showNotification("Failed to load questions from the server. Please try again later.")
+  }
+}
 
 // --- START QUIZ ---
 function startQuiz() {
@@ -61,6 +80,12 @@ function startQuiz() {
 
   quizContainerDiv.style.display = 'block'
   nextButton.style.display = 'none'
+   
+  console.log(categorySelectionDiv)
+console.log(scoreNotification)
+console.log(leaderboardContainer)
+console.log(viewLeaderboardBtn)
+console.log(leaderboardBackButton)
 
   showNotification("Quiz started! Good luck!")
 

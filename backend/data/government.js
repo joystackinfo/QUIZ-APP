@@ -182,4 +182,4 @@ const governmentQuestions = [
 
 ]
 
-export default governmentQuestions;
+module.exports = governmentQuestions;

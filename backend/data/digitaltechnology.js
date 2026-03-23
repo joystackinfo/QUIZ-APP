@@ -183,4 +183,4 @@ const digitalTechQuestions = [
 
 ]
 
-export default digitalTechQuestions;
+module.exports = digitalTechQuestions;

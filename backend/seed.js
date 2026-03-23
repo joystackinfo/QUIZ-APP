@@ -1,41 +1,48 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+// backend/seed.js
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-//Data Questions
-import literatureQuestions from "./data/Literature.js";
-import citizenshipQuestions from "./data/citizenship.js";
-import governmentQuestions from "./data/government.js";
-import digitalTechQuestions from "./data/digitaltechnology.js";
-// Import Question model
-import Question from "./models/Question.js";
-
+// Load environment variables
 dotenv.config();
 
+// Data questions
+const literatureQuestions = require("./data/Literature");
+const citizenshipQuestions = require("./data/citizenship");
+const governmentQuestions = require("./data/government");
+const digitalTechQuestions = require("./data/digitaltechnology");
+
+// Question model
+const Question = require("./models/question.model");
+
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGODB_URI,)
 .then(() => {
     console.log("Connected to MongoDB");
 })
-.catch((err) => {
+.catch(err => {
     console.error("Error connecting to MongoDB:", err);
 });
 
-// Function to seed questions into the database
-async function seedQuestions() { 
+// Function to seed questions
+async function seedQuestions() {
     try {
-        await Question.deleteMany({}); // Clear existing questions
+        await Question.deleteMany({});
         console.log("Old questions cleared");
+
+        const allQuestions = [
+            ...literatureQuestions,
+            ...citizenshipQuestions,
+            ...governmentQuestions,
+            ...digitalTechQuestions
+        ];
+
+        await Question.insertMany(allQuestions);
+        console.log("Questions seeded successfully");
     } catch (err) {
-        console.error("Error clearing questions:", err);
+        console.error("Seeding error:", err);
+    } finally {
+        mongoose.disconnect();
     }
-    const allQuestions = [
-        ...literatureQuestions,
-        ...citizenshipQuestions,
-        ...governmentQuestions,
-        ...digitalTechQuestions
-    ]; //.....(Spreadsa all the questions inside into one array)
-    await Question.insertMany(allQuestions); // Insert all questions into the database
-    console.log("Questions seeded successfully");
 }
 
 seedQuestions();

@@ -1,4 +1,6 @@
+
 const mongoose = require("mongoose");
+
 
 const answerSchema = new mongoose.Schema({
     text: String,
@@ -10,6 +12,6 @@ const questionSchema = new mongoose.Schema({
     answers: [answerSchema], // Array of answer objects
     explanation: String
 })
+ const Question = mongoose.model("Question", questionSchema);
 
-
-const Question = mongoose.model("Question", questionSchema);
+module.exports = Question;
