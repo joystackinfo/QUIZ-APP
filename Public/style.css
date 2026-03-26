@@ -55,16 +55,17 @@ body {
     font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
-    border: 2px solid #222;
+    border: 2px solid #ddd;
     text-align: center;
     transition: all 0.3s ease;
     background-color: #fff;
-    color: var(--text);
+    color: #222;
 }
 
 .btn:hover:not([disabled]) {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
     color: #fff;
+    border-color: transparent;
 }
 
 .btn:disabled {
@@ -74,7 +75,7 @@ body {
 
 /* Next button */
 #next-btn {
-    background-color: var(--accent);
+    background: linear-gradient(135deg, #8b1984, #620668);
     color: #fff;
     border: none;
     min-width: 110px;
@@ -84,12 +85,17 @@ body {
     border-radius: 10px;
     cursor: pointer;
     display: none;
+    transition: all 0.3s ease;
+}
+
+#next-btn:hover {
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
 }
 
 /* Quiz & question */
 #question {
     font-size: 18px;
-    color: #7014bc;
+    color: #222;
     font-weight: 600;
     margin-bottom: 20px;
     text-align: center;
@@ -105,39 +111,44 @@ body {
     width: 90%;
     border-radius: 12px;
     box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    background-color: #fff;
+    color: #222;
 }
+
+/* Category buttons */
 .category-btn {
-  display: block;          /* stack vertically */
-  margin: 10px auto;       /* center under heading */
-  width: 220px;            /* fixed width */
-  padding: 12px 20px;
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: var(--primary);
-  color: #fff;
-  border: none;
-  transition: transform 0.2s ease, background-color 0.3s ease;
+    display: block;
+    margin: 10px auto;
+    width: 220px;
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #222;
+    border: 2px solid #ddd;
+    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
+
 #category-selection h2 {
-  margin: 0;                /* remove default margins */
-  font-size: 20px;
-  font-weight: 700;
-  color: #7014bc;           /* match your theme */
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #7014bc;
 }
-.category-btn {
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-}
+
 .category-btn:hover {
-  background-color: var(--accent);
-  transform: scale(1.05);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
+    transform: scale(1.05);
 }
 
 .category-btn:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
-
 
 /* Username form */
 #username-form {
@@ -166,10 +177,13 @@ body {
     font-size: 1rem;
     border-radius: 8px;
     border: 2px solid #ddd;
+    background-color: #fff;
+    color: #222;
 }
 
 #username-input:focus {
     border-color: #7014bc;
+    outline: none;
 }
 
 #submit-username {
@@ -178,16 +192,15 @@ body {
     font-size: 1rem;
     border-radius: 8px;
     border: none;
-    background-color: var(--primary);
+    background: linear-gradient(135deg, #8b1984, #620668);
     color: #fff;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.2s ease, background 0.3s ease;
 }
 
 #submit-username:hover {
-    background-color: var(--accent);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
     transform: scale(1.05);
-    opacity: 0.9;
 }
 
 /* Progress bar */
@@ -226,8 +239,8 @@ body {
 }
 
 /* Correct / Incorrect */
-.correct { background-color: var(--success); }
-.incorrect { background-color: var(--danger); }
+.correct { background-color: var(--success) !important; color: #fff !important; border-color: var(--success) !important; }
+.incorrect { background-color: var(--danger) !important; color: #fff !important; border-color: var(--danger) !important; }
 
 /* Notification */
 .notification {
@@ -240,62 +253,64 @@ body {
     padding: 12px 20px;
     border-radius: 6px;
     font-weight: 600;
-      opacity: 0;
+    opacity: 0;
     pointer-events: none;
     transition: opacity 0.4s ease, transform 0.4s ease;
     z-index: 1000;
 }
-  
 
 .notification.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
-/* Score & action buttons (Play Again, Change Category, View Full Leaderboard, Back) */
-#play-again, 
-#change-category, 
-#view-leaderboard-btn, 
+
+/* Score & action buttons */
+#play-again,
+#change-category,
+#view-leaderboard-btn,
 #leaderboard-back-btn {
-    display: none; /* hidden by default, JS will toggle */
+    display: none;
     padding: 12px 24px;
-    margin: 10px 0; /* vertical spacing */
+    margin: 10px 0;
     border-radius: 8px;
     font-weight: 600;
-    background-color: var(--primary);
-    color: #fff;
+    background-color: #fff;
+    color: #222;
+    border: 2px solid #ddd;
     cursor: pointer;
     transition: all 0.3s ease;
     min-width: 180px;
     text-align: center;
 }
 
-#play-again:hover, 
-#change-category:hover, 
-#view-leaderboard-btn:hover, 
+#play-again:hover,
+#change-category:hover,
+#view-leaderboard-btn:hover,
 #leaderboard-back-btn:hover {
-    background-color: var(--accent);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
     transform: scale(1.05);
 }
 
-/* Leaderboard container setup */
+/* Leaderboard container */
 #leaderboard-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* center everything horizontally */
-    position: relative; /* buttons inside are positioned */
-    gap: 10px; /* spacing between table & button */
+    align-items: center;
+    position: relative;
+    gap: 10px;
     padding: 10px 0;
 }
 
-/* Back button specifically */
 #leaderboard-back-btn {
-    z-index: 20; /* ensures it sits above table or overlays if needed */
+    z-index: 20;
 }
 
 /* Score notification */
 #score-notification {
     background-color: #f0f8ff;
-    color: var(--text);
+    color: #222;
     padding: 14px 20px;
     border-radius: 8px;
     margin: 15px 0;
@@ -315,10 +330,11 @@ body {
     padding: 10px 12px;
     text-align: center;
     border-bottom: 1px solid #ddd;
+    color: #222;
 }
 
 #leaderboard-table th {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, #8b1984, #620668);
     color: #fff;
 }
 
@@ -329,6 +345,7 @@ body {
 .current-user {
     font-weight: bold;
     background-color: #f0f8ff;
+    color: #222;
 }
 
 /* Medal badges */
@@ -339,13 +356,14 @@ body {
     color: #fff;
     display: inline-block;
 }
+
 .hide {
     display: none;
 }
 
-.gold { background-color: #FFD700; }
-.silver { background-color: #C0C0C0; }
-.bronze { background-color: #cd7f32; }
+.gold { background-color: #FFD700; color: #7a5a00; }
+.silver { background-color: #C0C0C0; color: #444; }
+.bronze { background-color: #cd7f32; color: #4a2000; }
 
 /* Loading overlay */
 #leaderboard-loading {
@@ -355,7 +373,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255,255,255,0.85);
     font-size: 18px;
     font-weight: bold;
     color: var(--primary);

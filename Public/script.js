@@ -48,7 +48,7 @@ function showNotification(message) {
 // --- FETCH QUESTIONS FROM BACKEND ---
 async function fetchQuestionsAndStart() {
   try {
-    const response = await fetch(`/api/questions?category=${selectedCategory}`)
+    const response = await fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`)
     const data = await response.json()
 
     questions = data
@@ -61,7 +61,7 @@ async function fetchQuestionsAndStart() {
     startQuiz()
 
   } catch (error) {
-    console.error("Fetch error:", error)
+    console.error("Failed to fetch questions:", error)
     showNotification("Failed to load questions from the server. Please try again later.")
   }
 }
@@ -78,7 +78,7 @@ if (leaderboardContainer) leaderboardContainer.style.display = 'none'
 if (viewLeaderboardBtn) viewLeaderboardBtn.style.display = 'none'
 if (leaderboardBackButton) leaderboardBackButton.style.display = 'none'
 
-  quizContainerDiv.style.display = 'block'
+  quizContainerDiv.style.display = 'block' 
   nextButton.style.display = 'none'
    
 
@@ -332,9 +332,9 @@ document.querySelectorAll(".category-btn").forEach(btn => {
     selectedCategory = btn.dataset.category
 
     // later we will fetch questions here
-    // fetch(`/api/questions?category=${selectedCategory}`)
+    fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`)
 
-    startQuiz()
+    fetchQuestionsAndStart()
 
   })
 

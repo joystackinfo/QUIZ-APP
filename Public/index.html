@@ -1,9 +1,11 @@
+ 
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>Quiz App</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="app">
@@ -32,7 +34,7 @@
     <button class="category-btn" data-category="citizenship">
       Citizenship
     </button>
-    <button class="category-btn" data-category="digital
+    <button class="category-btn" data-category="digitaltechnology">
       Digital Tech
     </button>
         <h2>Select a Category</h2>
@@ -40,7 +42,7 @@
     </div>
 
     <!-- Quiz Section -->
-    <div id="quiz-container" style="display:none;">
+    <div id="quiz-container" class="hide">
       <div id="progress-wrap">
         <div id="progress-bar"></div>
       </div>
@@ -48,14 +50,14 @@
       <h2 id="question">Test your knowledge!</h2>
       <div id="answer-btn"></div>
       <div class="controls">
-        <button id="next-btn" style="display:none;">Next</button>
+        <button id="next-btn" class="hide">Next</button>
         <!-- Quiz Back button -->
-        <button id="quiz-back-btn" style="display:none;">Back</button>
+        <button id="quiz-back-btn" class="hide">Back</button>
       </div>
     </div>
 
     <!-- Score Notification & Actions -->
-    <div id="score-notification" style="display:none;">
+    <div id="score-notification" class="hide">
       <p id="score-text"></p>
       <div style="display:flex; justify-content:center; gap:10px; flex-wrap: wrap;">
         <button id="play-again">Play Again</button>
@@ -69,7 +71,7 @@
     </div>
 
     <!-- Leaderboard container -->
-    <div id="leaderboard-container" style="display:none; margin-top: 20px;">
+    <div id="leaderboard-container" class="hide" style="margin-top: 20px;">
       <h2>Leaderboard</h2>
       <table id="leaderboard-table">
         <thead>
@@ -84,12 +86,12 @@
 
       <!-- Leaderboard back button -->
       <div style="text-align:center; margin-top: 15px;">
-        <button id="leaderboard-back-btn" style="display:none;">Back</button>
+        <button id="leaderboard-back-btn" class="hide">Back</button>
       </div>
     </div>
 
     <!-- Loading indicator -->
-    <div id="leaderboard-loading" style="display:none;">Loading...</div>
+    <div id="leaderboard-loading" class="hide">Loading...</div>
     
   </div>
 
