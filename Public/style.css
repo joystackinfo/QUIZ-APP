@@ -87,6 +87,10 @@ body {
     display: none;
     transition: all 0.3s ease;
 }
+ #next-btn{
+    width: 48%;
+    text-align: center;
+ }
 
 #next-btn:hover {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
@@ -346,6 +350,15 @@ body {
     font-weight: bold;
     background-color: #f0f8ff;
     color: #222;
+}
+.controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+#quiz-back-btn, #next-btn{
+    width: 48%;
 }
 
 /* Medal badges */
