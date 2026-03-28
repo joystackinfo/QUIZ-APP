@@ -72,11 +72,11 @@ function startQuiz() {
   currentQuestionIndex = 0
   score = 0
 
-if (categorySelectionDiv) categorySelectionDiv.style.display = 'none'
-if (scoreNotification) scoreNotification.style.display = 'none'
-if (leaderboardContainer) leaderboardContainer.style.display = 'none'
-if (viewLeaderboardBtn) viewLeaderboardBtn.style.display = 'none'
-if (leaderboardBackButton) leaderboardBackButton.style.display = 'none'
+ categorySelectionDiv.style.display = 'none'
+ scoreNotification.style.display = 'none'
+ leaderboardContainer.style.display = 'none'
+  viewLeaderboardBtn.style.display = 'none'
+leaderboardBackButton.style.display = 'none'
 
   quizContainerDiv.style.display = 'block' 
   nextButton.style.display = 'none'
@@ -88,6 +88,15 @@ if (leaderboardBackButton) leaderboardBackButton.style.display = 'none'
 
 }
 
+viewLeaderboardBtn.addEventListener('click', () => {
+
+  leaderboardContainer.style.display = 'block'
+  scoreNotification.style.display = 'none'
+  viewLeaderboardBtn.style.display = 'none'
+  leaderboardBackButton.style.display = 'inline-block'
+
+  fetchLeaderboard()
+})
 
 // --- SHOW QUESTION ---
 function showQuestion() {
