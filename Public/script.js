@@ -29,6 +29,9 @@ const leaderboardTableBody = document.querySelector('#leaderboard-table tbody')
 const leaderboardLoading = document.getElementById('leaderboard-loading')
 const leaderboardBackButton = document.getElementById('leaderboard-back-btn')
 
+const selectedCategoryText = document.getElementById('selected-category')
+const backToUsernameBtn = document.getElementById('back-to-username')
+
 const notificationDiv = document.getElementById('notification')
 
 
@@ -62,7 +65,7 @@ async function fetchQuestionsAndStart() {
 
   } catch (error) {
     console.error("Failed to fetch questions:", error)
-    showNotification("Failed to load questions from the server. Please try again later.")
+    showNotification("Failed to load questions from the server. Please try again later.") // User-friendly error message
   }
 }
 
@@ -87,6 +90,28 @@ leaderboardBackButton.style.display = 'none'
   showQuestion()
 
 }
+const quizBackBtn = document.getElementById('quiz-back-btn')
+
+quizBackBtn.addEventListener('click', () => {
+
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--
+    showQuestion()
+  } else {
+    quizContainerDiv.style.display = 'none'
+    categorySelectionDiv.style.display = 'block'
+  }
+
+})
+
+
+leaderboardBackButton.addEventListener('click', () => {
+
+  leaderboardContainer.style.display = 'none'
+  scoreNotification.style.display = 'block'
+  viewLeaderboardBtn.style.display = 'inline-block'
+  leaderboardBackButton.style.display = 'none'
+});
 
 viewLeaderboardBtn.addEventListener('click', () => {
 
@@ -97,6 +122,13 @@ viewLeaderboardBtn.addEventListener('click', () => {
 
   fetchLeaderboard()
 })
+
+backToUsernameBtn.addEventListener('click', () => {
+
+  categorySelectionDiv.style.display = 'none'
+  usernameFormDiv.style.display = 'block'
+})
+ 
 
 // --- SHOW QUESTION ---
 function showQuestion() {
@@ -110,7 +142,7 @@ function showQuestion() {
   setTimeout(() => {
 
     questionElement.textContent =
-    `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}`
+    `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}` // Display question number and total questions
 
     questionElement.style.opacity = 1
 
@@ -232,7 +264,6 @@ function showScoreActions() {
 
 }
 
-
 // --- SHOW FINAL SCORE ---
 function showScore() {
 
@@ -340,8 +371,9 @@ document.querySelectorAll(".category-btn").forEach(btn => {
 
     selectedCategory = btn.dataset.category
 
-    // later we will fetch questions here
-    fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`)
+    if (selectedCategoryText) {
+      selectedCategoryText.textContent = `Selected Category: ${selectedCategory}`
+    }
 
     fetchQuestionsAndStart()
 

@@ -17,13 +17,14 @@
       <input type="text" id="username-input" placeholder="Your Name">
       <button id="submit-username" type="button">Submit</button>
     </div>
-
+ 
     <!-- Notification bar -->
     <div id="notification" class="notification" aria-live="polite"></div>
 
  
   <!-- CATEGORY SELECTION -->
   <div id="category-selection" class="hide">
+     <h2>Select a Category</h2>
 
     <button class="category-btn" data-category="literature">
       Literature in English
@@ -37,7 +38,8 @@
     <button class="category-btn" data-category="digitaltechnology">
       Digital Tech
     </button>
-        <h2>Select a Category</h2>
+         <h3 id="selected-category"></h3>
+         <button id="back-to-username">← Back</button>
 
     </div>
 
