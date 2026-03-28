@@ -34,6 +34,11 @@ const backToUsernameBtn = document.getElementById('back-to-username')
 
 const notificationDiv = document.getElementById('notification')
 
+viewLeaderboardBtn.style.display = 'none'
+leaderboardBackButton.style.display = 'none'
+leaderboardBackButton.style.display = 'none'
+quizBackBtn.classList.remove('hide') // Show the quiz back button when the quiz starts
+
 
 // --- NOTIFICATION FUNCTION ---
 function showNotification(message) {
@@ -83,8 +88,10 @@ leaderboardBackButton.style.display = 'none'
 
   quizContainerDiv.style.display = 'block' 
   nextButton.style.display = 'none'
-   
 
+  quizBackBtn.classList.remove('hide') 
+  nextButton.classList.remove('hide') 
+   
   showNotification("Quiz started! Good luck!")
 
   showQuestion()
@@ -162,6 +169,7 @@ function showQuestion() {
     }
 
     button.addEventListener('click', selectAnswer)
+    quizBackBtn.style.display = 'inline-block' // Show the quiz back button when the quiz starts
 
     answerButtonElement.appendChild(button)
 
@@ -230,6 +238,7 @@ function selectAnswer(e) {
   })
 
   nextButton.style.display = 'inline-block'
+  next.classList.remove('hide')
 
   saveQuizState()
 
