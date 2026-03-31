@@ -1,10 +1,11 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 // --- DEFAULTS ---
-let questions = []   // will be filled later from backend
+let questions = []
 let username = ""
 let currentQuestionIndex = 0
 let score = 0
 let selectedCategory = ""
-
 
 // --- DOM ELEMENTS ---
 const usernameFormDiv = document.getElementById('username-form')
@@ -25,35 +26,30 @@ const changeCategoryBtn = document.getElementById('change-category')
 
 const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn')
 const leaderboardContainer = document.getElementById('leaderboard-container')
-const leaderboardTableBody = document.querySelector('#leaderboard-table tbody')
-const leaderboardLoading = document.getElementById('leaderboard-loading')
 const leaderboardBackButton = document.getElementById('leaderboard-back-btn')
 
 const selectedCategoryText = document.getElementById('selected-category')
 const backToUsernameBtn = document.getElementById('back-to-username')
 
 const notificationDiv = document.getElementById('notification')
+const quizBackBtn = document.getElementById('quiz-back-btn')
 
+// --- INITIAL STATE ---
+leaderboardContainer.style.display = 'none'
 viewLeaderboardBtn.style.display = 'none'
 leaderboardBackButton.style.display = 'none'
-leaderboardBackButton.style.display = 'none'
-quizBackBtn.classList.remove('hide') // Show the quiz back button when the quiz starts
 
-
-// --- NOTIFICATION FUNCTION ---
+// --- NOTIFICATION ---
 function showNotification(message) {
-
-  if (!notificationDiv) return
-
   notificationDiv.textContent = message
   notificationDiv.classList.add("show")
 
   setTimeout(() => {
     notificationDiv.classList.remove("show")
   }, 3000)
-
 }
-// --- FETCH QUESTIONS FROM BACKEND ---
+
+// --- FETCH QUESTIONS ---
 async function fetchQuestionsAndStart() {
   try {
     const response = await fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`)
@@ -62,45 +58,33 @@ async function fetchQuestionsAndStart() {
     questions = data
 
     if (!questions.length) {
-      showNotification("No questions found for this category ")
+      showNotification("No questions found")
       return
     }
 
     startQuiz()
 
   } catch (error) {
-    console.error("Failed to fetch questions:", error)
-    showNotification("Failed to load questions from the server. Please try again later.") // User-friendly error message
+    console.error(error)
+    showNotification("Error loading questions")
   }
 }
 
 // --- START QUIZ ---
 function startQuiz() {
-
   currentQuestionIndex = 0
   score = 0
 
- categorySelectionDiv.style.display = 'none'
- scoreNotification.style.display = 'none'
- leaderboardContainer.style.display = 'none'
-  viewLeaderboardBtn.style.display = 'none'
-leaderboardBackButton.style.display = 'none'
-
-  quizContainerDiv.style.display = 'block' 
-  nextButton.style.display = 'none'
-
-  quizBackBtn.classList.remove('hide') 
-  nextButton.classList.remove('hide') 
-   
-  showNotification("Quiz started! Good luck!")
+  categorySelectionDiv.style.display = 'none'
+  quizContainerDiv.style.display = 'block'
+  scoreNotification.style.display = 'none'
+  leaderboardContainer.style.display = 'none'
 
   showQuestion()
-
 }
-const quizBackBtn = document.getElementById('quiz-back-btn')
 
+// --- BACK BUTTON ---
 quizBackBtn.addEventListener('click', () => {
-
   if (currentQuestionIndex > 0) {
     currentQuestionIndex--
     showQuestion()
@@ -108,284 +92,111 @@ quizBackBtn.addEventListener('click', () => {
     quizContainerDiv.style.display = 'none'
     categorySelectionDiv.style.display = 'block'
   }
-
 })
-
-
-leaderboardBackButton.addEventListener('click', () => {
-
-  leaderboardContainer.style.display = 'none'
-  scoreNotification.style.display = 'block'
-  viewLeaderboardBtn.style.display = 'inline-block'
-  leaderboardBackButton.style.display = 'none'
-});
-
-viewLeaderboardBtn.addEventListener('click', () => {
-
-  leaderboardContainer.style.display = 'block'
-  scoreNotification.style.display = 'none'
-  viewLeaderboardBtn.style.display = 'none'
-  leaderboardBackButton.style.display = 'inline-block'
-
-  fetchLeaderboard()
-})
-
-backToUsernameBtn.addEventListener('click', () => {
-
-  categorySelectionDiv.style.display = 'none'
-  usernameFormDiv.style.display = 'block'
-})
- 
 
 // --- SHOW QUESTION ---
 function showQuestion() {
-
   resetState()
 
   const currentQuestion = questions[currentQuestionIndex]
 
-  questionElement.style.opacity = 0
+  questionElement.textContent =
+    `Question ${currentQuestionIndex + 1}: ${currentQuestion.question}`
 
-  setTimeout(() => {
-
-    questionElement.textContent =
-    `Question ${currentQuestionIndex + 1} of ${questions.length}: ${currentQuestion.question}` // Display question number and total questions
-
-    questionElement.style.opacity = 1
-
-  }, 100)
-
-
-  const answers = shuffleArray(currentQuestion.answers.slice())
-
-  answers.forEach(answer => {
-
+  currentQuestion.answers.forEach(answer => {
     const button = document.createElement('button')
-    button.type = 'button'
     button.textContent = answer.text
-    button.classList.add('btn', 'answer-btn')
+    button.classList.add('btn')
+
     if (answer.correct) {
-      button.dataset.correct = 'true'
+      button.dataset.correct = "true"
     }
 
     button.addEventListener('click', selectAnswer)
-    quizBackBtn.style.display = 'inline-block' // Show the quiz back button when the quiz starts
-
     answerButtonElement.appendChild(button)
-
   })
-
-  updateProgress()
-
 }
 
-
-// --- RESET STATE ---
+// --- RESET ---
 function resetState() {
-
   nextButton.style.display = 'none'
-
-  answerButtonElement.innerHTML = ''
-
+  answerButtonElement.innerHTML = ""
 }
-
-// --- SHUFFLE ARRAY ---
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
-
-  }
-
-  return arr
-
-}
-
-// --- UPDATE PROGRESS BAR ---
-function updateProgress() {
-
-  const pct = Math.round((currentQuestionIndex / questions.length) * 100)
-
-  if (progressBar) progressBar.style.width = `${pct}%`
-
-}
-
 
 // --- SELECT ANSWER ---
 function selectAnswer(e) {
+  const correct = e.target.dataset.correct === "true"
 
-  const selectBtn = e.target
-  const isCorrect = selectBtn.dataset.correct === 'true'
-  if (isCorrect) {
-    selectBtn.classList.add('correct','pulse')
-    score++
-  } else {
+  if (correct) score++
 
-    selectBtn.classList.add('incorrect','shake')
-
-  }
-
-  Array.from(answerButtonElement.children).forEach(button => {
-
-    if (button.dataset.correct === 'true') {
-
-      button.classList.add('correct')
-
-    }
-
-    button.disabled = true
-
+  Array.from(answerButtonElement.children).forEach(btn => {
+    btn.disabled = true
   })
 
   nextButton.style.display = 'inline-block'
-  next.classList.remove('hide')
-
-  saveQuizState()
-
 }
 
-
-// --- NEXT QUESTION ---
-function handleNextButton() {
-
+// --- NEXT ---
+nextButton.addEventListener('click', () => {
   currentQuestionIndex++
 
   if (currentQuestionIndex < questions.length) {
-
     showQuestion()
-
   } else {
-
     showScore()
-
   }
+})
 
-}
-
-
-// --- SHOW SCORE ACTION BUTTONS ---
-function showScoreActions() {
-
-  playAgainBtn.style.display = 'inline-block'
-  changeCategoryBtn.style.display = 'inline-block'
-  viewLeaderboardBtn.style.display = 'inline-block'
-  leaderboardBackButton.style.display = 'none'
-
-}
-
-// --- SHOW FINAL SCORE ---
+// --- SCORE ---
 function showScore() {
-
-  const points = score * 5
-
-  scoreText.textContent = `You scored ${points} points!`
-
+  quizContainerDiv.style.display = 'none'
   scoreNotification.style.display = 'block'
+  scoreText.textContent = `You scored ${score * 5} points!`
 
-  quizContainerDiv.style.display = 'none'
-
-  answerButtonElement.innerHTML = ""
-
-  showScoreActions()
-
+  viewLeaderboardBtn.style.display = 'inline-block'
 }
 
-
-// --- SAVE QUIZ STATE ---
-function saveQuizState() {
-
-  localStorage.setItem('quizState', JSON.stringify({
-    username,
-    currentQuestionIndex,
-    score,
-    category: selectedCategory
-
-  }))
-
-}
-
-
-// --- RESTORE STATE ---
-const savedState = JSON.parse(localStorage.getItem('quizState'))
-
-if (savedState) {
-
-  username = savedState.username
-  currentQuestionIndex = savedState.currentQuestionIndex
-  score = savedState.score
-  selectedCategory = savedState.category
-
-}
-
-
-// --- EVENT LISTENERS ---
-nextButton.addEventListener('click', handleNextButton)
-
-playAgainBtn.addEventListener('click', () => {
-
-  scoreNotification.style.display = 'none'
-
-  startQuiz()
-
-})
-
-changeCategoryBtn.addEventListener('click', () => {
-
-  scoreNotification.style.display = 'none'
-  quizContainerDiv.style.display = 'none'
-  leaderboardContainer.style.display = 'none'
-
-  categorySelectionDiv.style.display = 'block'
-
-  viewLeaderboardBtn.style.display = 'none'
-  leaderboardBackButton.style.display = 'none'
-
-})
-
-
-// --- USERNAME SUBMIT ---
+// --- USERNAME ---
 usernameSubmitBtn.addEventListener('click', () => {
+  const name = usernameInput.value.trim()
 
-  const inputName = usernameInput.value.trim()
-
-  if (!inputName) {
-
-    showNotification("Please enter your name to proceed.")
-
+  if (!name) {
+    showNotification("Enter your name")
     return
-
   }
 
-  username = inputName
-
-  usernameFormDiv.classList.add("hide")
-
-  setTimeout(() => {
-    usernameFormDiv.style.display = 'none'
-  }, 300)
-
-  usernameInput.disabled = true
-
+  username = name
+  usernameFormDiv.style.display = 'none'
   categorySelectionDiv.style.display = 'block'
-
 })
 
-
-// --- CATEGORY SELECTION PLACEHOLDER ---
-// (subjects will be added here later)
-
+// --- CATEGORY ---
 document.querySelectorAll(".category-btn").forEach(btn => {
-
   btn.addEventListener("click", () => {
-
     selectedCategory = btn.dataset.category
 
-    if (selectedCategoryText) {
-      selectedCategoryText.textContent = `Selected Category: ${selectedCategory}`
-    }
+    selectedCategoryText.textContent =
+      `Selected: ${selectedCategory}`
 
     fetchQuestionsAndStart()
-
   })
+})
+
+// --- BACK TO USERNAME ---
+backToUsernameBtn.addEventListener('click', () => {
+  categorySelectionDiv.style.display = 'none'
+  usernameFormDiv.style.display = 'block'
+})
+
+// --- LEADERBOARD ---
+viewLeaderboardBtn.addEventListener('click', () => {
+  leaderboardContainer.style.display = 'block'
+  scoreNotification.style.display = 'none'
+})
+
+leaderboardBackButton.addEventListener('click', () => {
+  leaderboardContainer.style.display = 'none'
+  scoreNotification.style.display = 'block'
+})
 
 })
