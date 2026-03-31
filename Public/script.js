@@ -124,24 +124,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- SELECT ANSWER ---
   function selectAnswer(e) {
-    const correct = e.target.dataset.correct === "true";
+  const selectedBtn = e.target
+  const isCorrect = selectedBtn.dataset.correct === "true"
 
+  // If correct → increase score
+  if (isCorrect) {
+    score++
+    selectedBtn.classList.add("correct") // green
+  } else {
+    selectedBtn.classList.add("incorrect") // red
+
+    // Find the correct answer and highlight it
     Array.from(answerButtonElement.children).forEach(btn => {
-      btn.disabled = true;
-
-      // --- Show correct/incorrect colors ---
       if (btn.dataset.correct === "true") {
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("incorrect");
+        btn.classList.add("correct")
       }
-    });
-
-    if (correct) score++;
-
-    nextButton.style.display = 'inline-block';
+    })
   }
 
+  // Disable all buttons after answering
+  Array.from(answerButtonElement.children).forEach(btn => {
+    btn.disabled = true
+  })
+
+  // Show next button
+  nextButton.style.display = 'inline-block'
+}
   // --- NEXT ---
   nextButton.addEventListener('click', () => {
     currentQuestionIndex++;

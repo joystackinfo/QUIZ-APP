@@ -142,6 +142,36 @@ body {
     font-weight: 700;
     color: #7014bc;
 }
+/* Category buttons in two rows (two per row) */
+#category-selection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+.category-btn {
+  flex: 0 0 48%; /* two per row */
+}
+
+/* Next button on right side & back button left side */
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+#next-btn { width: 48%; order: 2; }
+#quiz-back-btn { width: 48%; order: 1; }
+
+/* Correct/Incorrect buttons colors */
+.correct
+ { background-color: #16a34a !important;
+     color: #fff !important;
+      border: 2px solid #15803d !important;
+     }
+.incorrect { 
+    background-color: #dc2626 !important;
+     color: #fff !important; 
+     border: 2px solid #991b1b !important;
+     }
 
 .category-btn:hover {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
@@ -153,6 +183,7 @@ body {
 .category-btn:active {
     transform: scale(0.95);
 }
+
 
 /* Username form */
 #username-form {
@@ -242,9 +273,6 @@ body {
     75% { transform: translateX(-4px); }
 }
 
-/* Correct / Incorrect */
-.correct { background-color: var(--success) !important; color: #fff !important; border-color: var(--success) !important; }
-.incorrect { background-color: var(--danger) !important; color: #fff !important; border-color: var(--danger) !important; }
 
 /* Notification */
 .notification {
@@ -350,15 +378,6 @@ body {
     font-weight: bold;
     background-color: #f0f8ff;
     color: #222;
-}
-.controls {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-}
-
-#quiz-back-btn, #next-btn{
-    width: 48%;
 }
 
 /* Medal badges */
