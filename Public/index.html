@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +8,7 @@
 </head>
 <body>
   <div class="app">
+    
     <h1>Welcome to Quiz App</h1>
 
     <!-- Username Input -->
@@ -17,30 +17,19 @@
       <input type="text" id="username-input" placeholder="Your Name">
       <button id="submit-username" type="button">Submit</button>
     </div>
- 
+
     <!-- Notification bar -->
     <div id="notification" class="notification" aria-live="polite"></div>
 
- 
-  <!-- CATEGORY SELECTION -->
-  <div id="category-selection" class="hide">
-     <h2>Select a Category</h2>
-
-    <button class="category-btn" data-category="literature">
-      📚Literature in English
-    </button>
-    <button class="category-btn" data-category="government">
-      🏛Government
-    </button>
-    <button class="category-btn" data-category="citizenship">
-      🌏Citizenship
-    </button>
-    <button class="category-btn" data-category="digitaltechnology">
-    💻Digital Tech
-    </button>
-         <h3 id="selected-category"></h3>
-         <button id="back-to-username">← Back</button>
-
+    <!-- CATEGORY SELECTION -->
+    <div id="category-selection" class="hide">
+      <h2>Select a Category</h2>
+      <button class="category-btn" data-category="literature">📚 Literature in English</button>
+      <button class="category-btn" data-category="government">🏛 Government</button>
+      <button class="category-btn" data-category="citizenship">🌏 Citizenship</button>
+      <button class="category-btn" data-category="digitaltechnology">💻 Digital Tech</button>
+      <h3 id="selected-category"></h3>
+      <button id="back-to-username">← Back</button>
     </div>
 
     <!-- Quiz Section -->
@@ -48,33 +37,38 @@
       <div id="progress-wrap">
         <div id="progress-bar"></div>
       </div>
-      
       <h2 id="question">Test your knowledge!</h2>
       <div id="answer-btn"></div>
 
+      <!-- Explanation card -->
+      <div id="explanation-card" class="hide">
+        <span class="explanation-icon" id="explanation-icon">✅</span>
+        <div>
+          <p class="explanation-label" id="explanation-label">Correct!</p>
+          <p class="explanation-text" id="explanation-text"></p>
+        </div>
+      </div>
+
       <div class="controls">
-             <button id="quiz-back-btn" class="hide">← Back</button>
-        <button id="next-btn" class="hide">Next →</button>
+        <button id="quiz-back-btn">← Back</button>
+        <button id="next-btn" class="invisible">Next →</button>
       </div>
     </div>
 
     <!-- Score Notification & Actions -->
     <div id="score-notification" class="hide">
       <p id="score-text"></p>
-      <div style="display:flex; justify-content:center; gap:10px; flex-wrap: wrap;">
+      <div class="score-actions">
         <button id="play-again">Play Again</button>
         <button id="change-category">Change Category</button>
+        <button id="view-leaderboard-btn">View Full Leaderboard</button>
       </div>
     </div>
 
-    <!-- View Full Leaderboard -->
-    <div style="text-align:center; margin-top: 15px;">
-      <button id="view-leaderboard-btn">View Full Leaderboard</button>
-    </div>
-
     <!-- Leaderboard container -->
-    <div id="leaderboard-container" class="hide" style="margin-top: 20px;">
+    <div id="leaderboard-container" class="hide">
       <h2>Leaderboard</h2>
+      <div id="leaderboard-loading" class="hide">Loading...</div>
       <table id="leaderboard-table">
         <thead>
           <tr>
@@ -85,16 +79,11 @@
         </thead>
         <tbody></tbody>
       </table>
-
-      <!-- Leaderboard back button -->
       <div style="text-align:center; margin-top: 15px;">
-        <button id="leaderboard-back-btn" class="hide">Back</button>
+        <button id="leaderboard-back-btn">← Back</button>
       </div>
     </div>
 
-    <!-- Loading indicator -->
-    <div id="leaderboard-loading" class="hide">Loading...</div>
-    
   </div>
 
   <script type="module" src="script.js"></script>

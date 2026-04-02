@@ -3,18 +3,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
 }
 
 body {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    min-height: 100vh;
 }
 
 .app {
     background-color: #fff;
     width: 90%;
     max-width: 600px;
-    margin: 100px auto 0;
+    margin: 60px auto;
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -37,7 +38,7 @@ body {
 .app h1 {
     font-size: 25px;
     border-bottom: 1px solid #333;
-    padding-bottom: 30px;
+    padding-bottom: 20px;
     margin-bottom: 20px;
 }
 
@@ -46,20 +47,21 @@ body {
     margin-bottom: 20px;
 }
 
-/* Buttons - general */
+/* Answer buttons */
 .btn {
     width: 100%;
     padding: 12px 16px;
     margin: 10px 0;
     font-weight: 500;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     border: 2px solid #ddd;
     text-align: center;
     transition: all 0.3s ease;
     background-color: #fff;
     color: #222;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
 .btn:hover:not([disabled]) {
@@ -73,27 +75,120 @@ body {
     opacity: 0.7;
 }
 
-/* Next button */
+/* =====================
+   EXPLANATION CARD
+   ===================== */
+#explanation-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-top: 16px;
+    font-size: 14px;
+    line-height: 1.6;
+
+    /* Slide in animation */
+    animation: slideDown 0.35s ease forwards;
+}
+
+#explanation-card.correct-card {
+    background-color: #f0fdf4;
+    border: 2px solid #16a34a;
+}
+
+#explanation-card.incorrect-card {
+    background-color: #fff1f2;
+    border: 2px solid #dc2626;
+}
+
+.explanation-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.explanation-label {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+#explanation-card.correct-card .explanation-label {
+    color: #15803d;
+}
+
+#explanation-card.incorrect-card .explanation-label {
+    color: #dc2626;
+}
+
+.explanation-text {
+    color: #444;
+    font-weight: 400;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================
+   CONTROLS ROW
+   ===================== */
+.controls {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#quiz-back-btn {
+    flex: 1;
+    height: 45px;
+    background: #fff;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+#quiz-back-btn:hover {
+    background: #f3e8ff;
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
 #next-btn {
+    flex: 1;
+    height: 45px;
     background: linear-gradient(135deg, #8b1984, #620668);
     color: #fff;
     border: none;
-    min-width: 110px;
     font-weight: 600;
-    margin: 20px 8px 0 0;
-    padding: 10px 14px;
+    font-size: 15px;
     border-radius: 10px;
     cursor: pointer;
-    display: none;
     transition: all 0.3s ease;
-}
- #next-btn{
-    width: 48%;
     text-align: center;
- }
+}
 
 #next-btn:hover {
-    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    background: linear-gradient(135deg, #a020a0, #7a0878);
+}
+
+.invisible {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* Quiz & question */
@@ -113,20 +208,63 @@ body {
 
 #answer-btn .btn {
     width: 90%;
-    border-radius: 12px;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-    background-color: #fff;
-    color: #222;
 }
 
-/* Category buttons */
+/* =====================
+   CATEGORY GRID
+   ===================== */
+#category-selection {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+#category-selection.show {
+    display: grid;
+}
+
+#category-selection h2 {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0 0 5px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #7014bc;
+    text-align: center;
+}
+
+#selected-category { display: none; }
+
+#back-to-username {
+    grid-column: 1 / -1;
+    width: auto;
+    padding: 8px 24px;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#back-to-username:hover {
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
+}
+
 .category-btn {
-    display: block;
-    margin: 10px auto;
-    width: 220px;
+    width: 100%;
+    max-width: 220px;
     padding: 12px 20px;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
     border-radius: 8px;
     cursor: pointer;
     background-color: #fff;
@@ -134,44 +272,9 @@ body {
     border: 2px solid #ddd;
     transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-}
-
-#category-selection h2 {
     margin: 0;
-    font-size: 20px;
-    font-weight: 700;
-    color: #7014bc;
+    text-align: center;
 }
-/* Category buttons in two rows (two per row) */
-#category-selection {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-.category-btn {
-  flex: 0 0 48%; /* two per row */
-}
-
-/* Next button on right side & back button left side */
-.controls {
-  display: flex;
-  justify-content: space-between;
-}
-
-#next-btn { width: 48%; order: 2; }
-#quiz-back-btn { width: 48%; order: 1; }
-
-/* Correct/Incorrect buttons colors */
-.correct
- { background-color: #16a34a !important;
-     color: #fff !important;
-      border: 2px solid #15803d !important;
-     }
-.incorrect { 
-    background-color: #dc2626 !important;
-     color: #fff !important; 
-     border: 2px solid #991b1b !important;
-     }
 
 .category-btn:hover {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
@@ -180,10 +283,19 @@ body {
     transform: scale(1.05);
 }
 
-.category-btn:active {
-    transform: scale(0.95);
-}
+.category-btn:active { transform: scale(0.95); }
 
+/* Correct/Incorrect answer buttons */
+.correct {
+    background-color: #16a34a !important;
+    color: #fff !important;
+    border: 2px solid #15803d !important;
+}
+.incorrect {
+    background-color: #dc2626 !important;
+    color: #fff !important;
+    border: 2px solid #991b1b !important;
+}
 
 /* Username form */
 #username-form {
@@ -194,18 +306,9 @@ body {
     min-height: 15vh;
     justify-content: center;
     padding: 12px 20px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-#username-form.hide {
-    opacity: 0;
-    transform: translateY(-10px);
-}
-
-#username-input, #submit-username {
-    width: 250px;
-    margin: 0 auto;
-}
+#username-input, #submit-username { width: 250px; margin: 0 auto; }
 
 #username-input {
     padding: 12px 16px;
@@ -216,10 +319,7 @@ body {
     color: #222;
 }
 
-#username-input:focus {
-    border-color: #7014bc;
-    outline: none;
-}
+#username-input:focus { border-color: #7014bc; outline: none; }
 
 #submit-username {
     padding: 12px 20px;
@@ -234,7 +334,7 @@ body {
 }
 
 #submit-username:hover {
-    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    background: linear-gradient(135deg, #a020a0, #7a0878);
     transform: scale(1.05);
 }
 
@@ -252,27 +352,8 @@ body {
     width: 0%;
     background: linear-gradient(90deg, var(--primary), var(--accent));
     transition: width 400ms ease;
+    border-radius: 8px;
 }
-
-/* Animations */
-.pulse {
-    animation: pulse 700ms ease forwards;
-}
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-}
-
-.shake {
-    animation: shake 450ms ease;
-}
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    50% { transform: translateX(6px); }
-    75% { transform: translateX(-4px); }
-}
-
 
 /* Notification */
 .notification {
@@ -296,22 +377,47 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Score & action buttons */
+/* Score notification */
+#score-notification {
+    background-color: #f0f8ff;
+    color: #222;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+#score-text {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #4d0d81;
+}
+
+.score-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
 #play-again,
 #change-category,
 #view-leaderboard-btn,
 #leaderboard-back-btn {
-    display: none;
-    padding: 12px 24px;
-    margin: 10px 0;
+    padding: 11px 22px;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 14px;
     background-color: #fff;
     color: #222;
     border: 2px solid #ddd;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 180px;
+    min-width: 150px;
     text-align: center;
 }
 
@@ -322,40 +428,16 @@ body {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
     color: #fff;
     border-color: transparent;
-    transform: scale(1.05);
 }
 
-/* Leaderboard container */
-#leaderboard-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    gap: 10px;
-    padding: 10px 0;
-}
+/* Leaderboard */
+#leaderboard-container { margin-top: 10px; width: 100%; }
+#leaderboard-container h2 { text-align: center; }
 
-#leaderboard-back-btn {
-    z-index: 20;
-}
-
-/* Score notification */
-#score-notification {
-    background-color: #f0f8ff;
-    color: #222;
-    padding: 14px 20px;
-    border-radius: 8px;
-    margin: 15px 0;
-    text-align: center;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* Leaderboard table */
 #leaderboard-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 #leaderboard-table th, #leaderboard-table td {
@@ -370,52 +452,34 @@ body {
     color: #fff;
 }
 
-#leaderboard-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
+#leaderboard-table tr:nth-child(even) { background-color: #f9f9f9; }
 
-.current-user {
-    font-weight: bold;
-    background-color: #f0f8ff;
-    color: #222;
-}
+.current-user { font-weight: bold; background-color: #f0f8ff !important; }
 
-/* Medal badges */
-.medal {
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: #fff;
-    display: inline-block;
-}
-
-.hide {
-    display: none;
-}
-
-.gold { background-color: #FFD700; color: #7a5a00; }
+.medal { font-weight: bold; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+.gold   { background-color: #FFD700; color: #7a5a00; }
 .silver { background-color: #C0C0C0; color: #444; }
 .bronze { background-color: #cd7f32; color: #4a2000; }
 
-/* Loading overlay */
-#leaderboard-loading {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255,255,255,0.85);
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--primary);
-    border-radius: 10px;
-    z-index: 10;
-    display: none;
+/* Animations */
+.pulse { animation: pulse 700ms ease forwards; }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
 }
+
+.shake { animation: shake 450ms ease; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-4px); }
+}
+
+.hide { display: none !important; }
 
 /* Responsive */
 @media (max-width: 500px) {
-    .app { width: 95%; margin: 40px auto; padding: 20px; }
+    .app { width: 95%; margin: 30px auto; padding: 20px; }
     #answer-btn .btn { width: 100%; font-size: 15px; }
 }

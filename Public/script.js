@@ -19,34 +19,80 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextButton = document.getElementById('next-btn');
   const progressBar = document.getElementById('progress-bar');
 
+  const explanationCard = document.getElementById('explanation-card');
+  const explanationIcon = document.getElementById('explanation-icon');
+  const explanationLabel = document.getElementById('explanation-label');
+  const explanationText = document.getElementById('explanation-text');
+
   const scoreNotification = document.getElementById('score-notification');
   const scoreText = document.getElementById('score-text');
   const playAgainBtn = document.getElementById('play-again');
   const changeCategoryBtn = document.getElementById('change-category');
-
   const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
+
   const leaderboardContainer = document.getElementById('leaderboard-container');
   const leaderboardBackButton = document.getElementById('leaderboard-back-btn');
 
-  const selectedCategoryText = document.getElementById('selected-category');
   const backToUsernameBtn = document.getElementById('back-to-username');
   const notificationDiv = document.getElementById('notification');
   const quizBackBtn = document.getElementById('quiz-back-btn');
 
-  // --- INITIAL STATE ---
-  leaderboardContainer.style.display = 'none';
-  viewLeaderboardBtn.style.display = 'none';
-  leaderboardBackButton.style.display = 'none';
-  quizContainerDiv.style.display = 'none';
-  categorySelectionDiv.style.display = 'none';
+  // --- HELPERS ---
+  function show(el) {
+    el.classList.remove('hide');
+    if (el === categorySelectionDiv) el.classList.add('show');
+  }
+
+  function hide(el) {
+    el.classList.add('hide');
+    if (el === categorySelectionDiv) el.classList.remove('show');
+  }
+
+  function isVisible(el) {
+    return !el.classList.contains('hide');
+  }
+
+  function showNext() {
+    nextButton.classList.remove('invisible');
+  }
+
+  function hideNext() {
+    nextButton.classList.add('invisible');
+  }
 
   // --- NOTIFICATION ---
   function showNotification(message) {
     notificationDiv.textContent = message;
     notificationDiv.classList.add("show");
-    setTimeout(() => {
-      notificationDiv.classList.remove("show");
-    }, 3000);
+    setTimeout(() => notificationDiv.classList.remove("show"), 3000);
+  }
+
+  // --- EXPLANATION CARD ---
+  function showExplanation(isCorrect, explanation) {
+    // Remove old correct/incorrect class
+    explanationCard.classList.remove('correct-card', 'incorrect-card');
+
+    if (isCorrect) {
+      explanationCard.classList.add('correct-card');
+      explanationIcon.textContent = '✅';
+      explanationLabel.textContent = 'Correct!';
+    } else {
+      explanationCard.classList.add('incorrect-card');
+      explanationIcon.textContent = '❌';
+      explanationLabel.textContent = 'Incorrect!';
+    }
+
+    explanationText.textContent = explanation || '';
+
+    // Re-trigger animation by removing and re-adding hide
+    explanationCard.classList.remove('hide');
+    // Force reflow so animation replays
+    void explanationCard.offsetWidth;
+  }
+
+  function hideExplanation() {
+    explanationCard.classList.add('hide');
+    explanationCard.classList.remove('correct-card', 'incorrect-card');
   }
 
   // --- FETCH QUESTIONS ---
@@ -72,26 +118,36 @@ document.addEventListener("DOMContentLoaded", () => {
   function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
+    progressBar.style.width = '0%';
 
-    categorySelectionDiv.style.display = 'none';
-    quizContainerDiv.style.display = 'block';
-    scoreNotification.style.display = 'none';
-    leaderboardContainer.style.display = 'none';
-    quizBackBtn.style.display = 'inline-block'; // show back button
-    nextButton.style.display = 'none'; // hide next initially
+    hide(categorySelectionDiv);
+    hide(scoreNotification);
+    hide(leaderboardContainer);
+
+    show(quizContainerDiv);
+    hideNext();
+    hideExplanation();
 
     updateProgressBar();
     showQuestion();
   }
 
-  // --- BACK BUTTON (quiz back) ---
+  // --- QUIZ BACK BUTTON ---
   quizBackBtn.addEventListener('click', () => {
-    if (currentQuestionIndex > 0) {
-      currentQuestionIndex--;
-      showQuestion();
-    } else {
-      quizContainerDiv.style.display = 'none';
-      categorySelectionDiv.style.display = 'block';
+    if (isVisible(quizContainerDiv)) {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showQuestion();
+      } else {
+        hide(quizContainerDiv);
+        show(categorySelectionDiv);
+      }
+    } else if (isVisible(scoreNotification)) {
+      hide(scoreNotification);
+      show(categorySelectionDiv);
+    } else if (isVisible(leaderboardContainer)) {
+      hide(leaderboardContainer);
+      show(scoreNotification);
     }
   });
 
@@ -106,9 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const button = document.createElement('button');
       button.textContent = answer.text;
       button.classList.add('btn');
-
       if (answer.correct) button.dataset.correct = "true";
-
       button.addEventListener('click', selectAnswer);
       answerButtonElement.appendChild(button);
     });
@@ -118,38 +172,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- RESET ---
   function resetState() {
-    nextButton.style.display = 'none';
-    answerButtonElement.innerHTML = ""; // clear old answers
+    hideNext();
+    hideExplanation();
+    answerButtonElement.innerHTML = "";
   }
 
   // --- SELECT ANSWER ---
   function selectAnswer(e) {
-  const selectedBtn = e.target
-  const isCorrect = selectedBtn.dataset.correct === "true"
+    const selectedBtn = e.target;
+    const isCorrect = selectedBtn.dataset.correct === "true";
 
-  // If correct → increase score
-  if (isCorrect) {
-    score++
-    selectedBtn.classList.add("correct") // green
-  } else {
-    selectedBtn.classList.add("incorrect") // red
+    if (isCorrect) {
+      score++;
+      selectedBtn.classList.add("correct");
+    } else {
+      selectedBtn.classList.add("incorrect");
+      Array.from(answerButtonElement.children).forEach(btn => {
+        if (btn.dataset.correct === "true") btn.classList.add("correct");
+      });
+    }
 
-    // Find the correct answer and highlight it
+    // Disable all buttons
     Array.from(answerButtonElement.children).forEach(btn => {
-      if (btn.dataset.correct === "true") {
-        btn.classList.add("correct")
-      }
-    })
+      btn.disabled = true;
+    });
+
+    // Show explanation from current question
+    const currentQuestion = questions[currentQuestionIndex];
+    showExplanation(isCorrect, currentQuestion.explanation);
+
+    showNext();
   }
 
-  // Disable all buttons after answering
-  Array.from(answerButtonElement.children).forEach(btn => {
-    btn.disabled = true
-  })
-
-  // Show next button
-  nextButton.style.display = 'inline-block'
-}
   // --- NEXT ---
   nextButton.addEventListener('click', () => {
     currentQuestionIndex++;
@@ -163,28 +217,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- PROGRESS BAR ---
   function updateProgressBar() {
     if (!questions.length) return;
-    const percent = ((currentQuestionIndex + 1) / questions.length) * 100;
+    const percent = (currentQuestionIndex + 1) / questions.length * 100;
 
-    // Gradient vibes: light -> medium -> deep
     let gradient;
     if (percent <= 30) gradient = 'linear-gradient(90deg, #e3c8f7, #d7a0f0)';
     else if (percent <= 70) gradient = 'linear-gradient(90deg, #c079e8, #8b1984)';
-    else gradient = 'linear-gradient(90deg, #5a0f5e, #1cc264)'; // green at end
+    else gradient = 'linear-gradient(90deg, #5a0f5e, #1cc264)';
 
     progressBar.style.width = `${percent}%`;
     progressBar.style.background = gradient;
   }
 
-  // --- SCORE ---
+  // --- SHOW SCORE ---
   function showScore() {
-    quizContainerDiv.style.display = 'none';
-    scoreNotification.style.display = 'block';
+    hide(quizContainerDiv);
     scoreText.textContent = `You scored ${score * 5} points!`;
-
-    viewLeaderboardBtn.style.display = 'inline-block';
+    show(scoreNotification);
   }
 
-  // --- USERNAME ---
+  // --- USERNAME SUBMIT ---
   usernameSubmitBtn.addEventListener('click', () => {
     const name = usernameInput.value.trim();
     if (!name) {
@@ -192,46 +243,47 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     username = name;
-    usernameFormDiv.style.display = 'none';
-    categorySelectionDiv.style.display = 'block';
+    hide(usernameFormDiv);
+    show(categorySelectionDiv);
   });
 
   // --- CATEGORY SELECTION ---
   document.querySelectorAll(".category-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       selectedCategory = btn.dataset.category;
-      selectedCategoryText.textContent = `Selected: ${selectedCategory}`;
       fetchQuestionsAndStart();
     });
   });
 
   // --- BACK TO USERNAME ---
   backToUsernameBtn.addEventListener('click', () => {
-    categorySelectionDiv.style.display = 'none';
-    usernameFormDiv.style.display = 'block';
+    hide(categorySelectionDiv);
+    show(usernameFormDiv);
   });
 
   // --- VIEW LEADERBOARD ---
   viewLeaderboardBtn.addEventListener('click', () => {
-    leaderboardContainer.style.display = 'block';
-    leaderboardBackButton.style.display = 'inline-block';
-    scoreNotification.style.display = 'none';
+    hide(scoreNotification);
+    show(leaderboardContainer);
   });
 
+  // --- LEADERBOARD BACK → username ---
   leaderboardBackButton.addEventListener('click', () => {
-    leaderboardContainer.style.display = 'none';
-    leaderboardBackButton.style.display = 'none';
-    scoreNotification.style.display = 'block';
+    hide(leaderboardContainer);
+    hide(scoreNotification);
+    show(usernameFormDiv);
+    usernameInput.value = '';
   });
 
-  // --- PLAY AGAIN / CHANGE CATEGORY ---
+  // --- PLAY AGAIN ---
   playAgainBtn.addEventListener('click', () => {
     startQuiz();
   });
 
+  // --- CHANGE CATEGORY ---
   changeCategoryBtn.addEventListener('click', () => {
-    scoreNotification.style.display = 'none';
-    categorySelectionDiv.style.display = 'block';
+    hide(scoreNotification);
+    show(categorySelectionDiv);
   });
 
 });

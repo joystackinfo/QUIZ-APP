@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 // Load environment variables
 dotenv.config();
 
+
 // Data questions
 const literatureQuestions = require("./data/Literature");
 const citizenshipQuestions = require("./data/citizenship");
