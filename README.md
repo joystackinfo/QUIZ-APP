@@ -19,11 +19,6 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
  ✅ Play Again / Change category options after quiz completion
 
 
-#### 📸 Screenshot
-![Homescreen] (quizapp-home.png)
-![Koreanknowledge](<quiz-app k-knowledge-1.png>)
-![Generalknowledge] (quizapp-general.png)
-
 ## 💻 Tech Stack 
 - **HTML5** – Structure of the app.
 
