@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="admin-layout">
+
+   
+    <!--        SIDEBAR        -->
+  
+    <aside class="sidebar">
+      <div class="sidebar-title">
+        <h1>👑 Admin</h1>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" data-section="welcome">🏠 Home</button>
+        <button class="nav-btn" data-section="add-question">➕ Add Question</button>
+        <button class="nav-btn" data-section="all-questions">📋 All Questions</button>
+        <button class="nav-btn" data-section="all-scores">🏆 All Scores</button>
+      </nav>
+    </aside>
+
+   
+    <!--      MAIN CONTENT     -->
+  
+    <main class="main-content">
+
+      <!-- WELCOME SECTION -->
+      <section id="welcome" class="section active">
+        <div class="welcome-box">
+          <h2>Welcome, Joyce! 👋</h2>
+          <p>Use the sidebar to manage questions and scores.</p>
+
+          <div class="stats-row">
+            <div class="stat-card">
+              <span class="stat-number" id="total-questions">--</span>
+              <span class="stat-label">Total Questions</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number" id="total-scores">--</span>
+              <span class="stat-label">Total Scores</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADD QUESTION SECTION -->
+      <section id="add-question" class="section hide">
+        <div class="card">
+          <h2>➕ Add New Question</h2>
+
+          <input type="text" id="new-question" placeholder="Question">
+
+          <select id="new-category">
+            <option value="">-- Select Category --</option>
+            <option value="literature">Literature in English</option>
+            <option value="government">Government</option>
+            <option value="citizenship">Citizenship</option>
+            <option value="digitaltechnology">Digital Tech</option>
+          </select>
+
+          <input type="text" id="new-explanation" placeholder="Explanation">
+
+          <div class="answers-input">
+            <p class="answers-label">Answers — select the correct one:</p>
+
+            <div class="answer-row">
+              <input type="radio" name="correct-answer" value="0">
+              <input type="text" class="answer-input" placeholder="Answer 1">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="correct-answer" value="1">
+              <input type="text" class="answer-input" placeholder="Answer 2">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="correct-answer" value="2">
+              <input type="text" class="answer-input" placeholder="Answer 3">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="correct-answer" value="3">
+              <input type="text" class="answer-input" placeholder="Answer 4">
+            </div>
+          </div>
+
+          <button id="add-question-btn">Add Question</button>
+          <p id="add-msg" class="msg"></p>
+        </div>
+      </section>
+
+      <!-- ALL QUESTIONS SECTION -->
+      <section id="all-questions" class="section hide">
+        <div class="card">
+          <h2>📋 All Questions</h2>
+
+          <select id="filter-category">
+            <option value="">-- All Categories --</option>
+            <option value="literature">Literature in English</option>
+            <option value="government">Government</option>
+            <option value="citizenship">Citizenship</option>
+            <option value="digitaltechnology">Digital Tech</option>
+          </select>
+
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="questions-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Edit form - hidden until admin clicks Edit -->
+        <div class="card hide" id="edit-section">
+          <h2>✏️ Edit Question</h2>
+
+          <input type="hidden" id="edit-id">
+          <input type="text" id="edit-question" placeholder="Question">
+          <input type="text" id="edit-explanation" placeholder="Explanation">
+
+          <div class="answers-input">
+            <p class="answers-label">Answers — select the correct one:</p>
+
+            <div class="answer-row">
+              <input type="radio" name="edit-correct" value="0">
+              <input type="text" class="edit-answer-input" placeholder="Answer 1">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="edit-correct" value="1">
+              <input type="text" class="edit-answer-input" placeholder="Answer 2">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="edit-correct" value="2">
+              <input type="text" class="edit-answer-input" placeholder="Answer 3">
+            </div>
+            <div class="answer-row">
+              <input type="radio" name="edit-correct" value="3">
+              <input type="text" class="edit-answer-input" placeholder="Answer 4">
+            </div>
+          </div>
+
+          <button id="save-edit-btn">Save Changes</button>
+          <button id="cancel-edit-btn">Cancel</button>
+          <p id="edit-msg" class="msg"></p>
+        </div>
+      </section>
+
+      <!-- ALL SCORES SECTION -->
+      <section id="all-scores" class="section hide">
+        <div class="card">
+          <h2>🏆 All Scores</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Category</th>
+                <th>Points</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="scores-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+ <script type="module" src="admin.js"></script>
+</body>
+</html>

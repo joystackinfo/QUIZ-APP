@@ -2,14 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Quiz App</title>
+  <title>Quizlet - Home</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="app">
-    
-    <h1>Welcome to Quiz App</h1>
+
+    <!-- Dynamic heading - text changes per section via JS -->
+    <div id="app-header">
+      <h1 id="app-title">Welcome to Quizlet</h1>
+      <p id="app-tagline">Test your knowledge and challenge yourself!</p>
+    </div>
+
+    <div class="divider"></div>
 
     <!-- Username Input -->
     <div id="username-form">
@@ -23,7 +29,6 @@
 
     <!-- CATEGORY SELECTION -->
     <div id="category-selection" class="hide">
-      <h2>Select a Category</h2>
       <button class="category-btn" data-category="literature">📚 Literature in English</button>
       <button class="category-btn" data-category="government">🏛 Government</button>
       <button class="category-btn" data-category="citizenship">🌏 Citizenship</button>
@@ -58,16 +63,22 @@
     <!-- Score Notification & Actions -->
     <div id="score-notification" class="hide">
       <p id="score-text"></p>
-      <div class="score-actions">
+
+      <!-- Big primary button -->
+      <button id="view-leaderboard-btn" class="btn-primary">View Leaderboard</button>
+
+      <!-- Secondary buttons row -->
+      <div class="score-secondary">
         <button id="play-again">Play Again</button>
         <button id="change-category">Change Category</button>
-        <button id="view-leaderboard-btn">View Full Leaderboard</button>
       </div>
+
+      <!-- Subtle home link at bottom -->
+      <button id="go-home-btn">← Home</button>
     </div>
 
     <!-- Leaderboard container -->
     <div id="leaderboard-container" class="hide">
-      <h2>Leaderboard</h2>
       <div id="leaderboard-loading" class="hide">Loading...</div>
       <table id="leaderboard-table">
         <thead>

@@ -29,20 +29,40 @@ body {
     --danger: #db5d59;
 }
 
-/* Headings */
-.app h1, .app h2 {
+/* =====================
+   APP HEADER
+   ===================== */
+#app-header {
+    margin-bottom: 6px;
+}
+
+#app-title {
     color: #4d0d81;
+    font-size: 25px;
     font-weight: 600;
 }
 
-.app h1 {
-    font-size: 25px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+/* Tagline only shows on username form */
+#app-tagline {
+    font-size: 13px;
+    color: #888;
+    margin-top: 4px;
 }
 
+#app-tagline.hide {
+    display: none !important;
+}
+
+.divider {
+    border-bottom: 1px solid #333;
+    margin-bottom: 20px;
+    margin-top: 16px;
+}
+
+/* Headings */
 .app h2 {
+    color: #4d0d81;
+    font-weight: 600;
     font-size: 20px;
     margin-bottom: 20px;
 }
@@ -87,8 +107,6 @@ body {
     margin-top: 16px;
     font-size: 14px;
     line-height: 1.6;
-
-    /* Slide in animation */
     animation: slideDown 0.35s ease forwards;
 }
 
@@ -114,13 +132,8 @@ body {
     margin-bottom: 4px;
 }
 
-#explanation-card.correct-card .explanation-label {
-    color: #15803d;
-}
-
-#explanation-card.incorrect-card .explanation-label {
-    color: #dc2626;
-}
+#explanation-card.correct-card .explanation-label { color: #15803d; }
+#explanation-card.incorrect-card .explanation-label { color: #dc2626; }
 
 .explanation-text {
     color: #444;
@@ -128,14 +141,8 @@ body {
 }
 
 @keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 /* =====================
@@ -163,17 +170,17 @@ body {
 }
 
 #quiz-back-btn:hover {
-    background: #f3e8ff;
-    border-color: var(--accent);
-    color: var(--accent);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
 }
 
 #next-btn {
     flex: 1;
     height: 45px;
-    background: linear-gradient(135deg, #8b1984, #620668);
-    color: #fff;
-    border: none;
+    background: #fff;
+    border: 2px solid var(--primary);
+    color: var(--primary);
     font-weight: 600;
     font-size: 15px;
     border-radius: 10px;
@@ -183,7 +190,9 @@ body {
 }
 
 #next-btn:hover {
-    background: linear-gradient(135deg, #a020a0, #7a0878);
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
 }
 
 .invisible {
@@ -206,9 +215,7 @@ body {
     align-items: center;
 }
 
-#answer-btn .btn {
-    width: 90%;
-}
+#answer-btn .btn { width: 90%; }
 
 /* =====================
    CATEGORY GRID
@@ -223,19 +230,7 @@ body {
     padding: 10px 0;
 }
 
-#category-selection.show {
-    display: grid;
-}
-
-#category-selection h2 {
-    grid-column: 1 / -1;
-    width: 100%;
-    margin: 0 0 5px 0;
-    font-size: 20px;
-    font-weight: 700;
-    color: #7014bc;
-    text-align: center;
-}
+#category-selection.show { display: grid; }
 
 #selected-category { display: none; }
 
@@ -285,7 +280,7 @@ body {
 
 .category-btn:active { transform: scale(0.95); }
 
-/* Correct/Incorrect answer buttons */
+/* Correct/Incorrect */
 .correct {
     background-color: #16a34a !important;
     color: #fff !important;
@@ -377,36 +372,99 @@ body {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Score notification */
+/* =====================
+   SCORE SCREEN
+   ===================== */
 #score-notification {
     background-color: #f0f8ff;
     color: #222;
-    padding: 20px;
+    padding: 24px 20px;
     border-radius: 8px;
     margin: 15px 0;
     text-align: center;
     font-weight: 600;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 #score-text {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: 22px;
     color: #4d0d81;
+    font-weight: 700;
+    margin-bottom: 6px;
 }
 
-.score-actions {
+/* Big primary button - View Leaderboard */
+.btn-primary {
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    background: linear-gradient(135deg, #8b1984, #620668);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #a020a0, #7a0878);
+    transform: scale(1.02);
+}
+
+/* Secondary buttons row */
+.score-secondary {
     display: flex;
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
+    width: 100%;
 }
 
 #play-again,
-#change-category,
-#view-leaderboard-btn,
+#change-category {
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    background-color: #fff;
+    color: #222;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    text-align: center;
+}
+
+#play-again:hover,
+#change-category:hover {
+    background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
+    color: #fff;
+    border-color: transparent;
+}
+
+/* Subtle home button at bottom */
+#go-home-btn {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 10px;
+    transition: color 0.3s ease;
+    margin-top: 4px;
+}
+
+#go-home-btn:hover { color: var(--primary); }
+
+/* Leaderboard back button */
 #leaderboard-back-btn {
     padding: 11px 22px;
     border-radius: 8px;
@@ -421,9 +479,6 @@ body {
     text-align: center;
 }
 
-#play-again:hover,
-#change-category:hover,
-#view-leaderboard-btn:hover,
 #leaderboard-back-btn:hover {
     background: linear-gradient(135deg, #e986b8, #b09be8, #9d96fc);
     color: #fff;
@@ -432,7 +487,6 @@ body {
 
 /* Leaderboard */
 #leaderboard-container { margin-top: 10px; width: 100%; }
-#leaderboard-container h2 { text-align: center; }
 
 #leaderboard-table {
     width: 100%;
@@ -453,7 +507,6 @@ body {
 }
 
 #leaderboard-table tr:nth-child(even) { background-color: #f9f9f9; }
-
 .current-user { font-weight: bold; background-color: #f0f8ff !important; }
 
 .medal { font-weight: bold; padding: 4px 8px; border-radius: 4px; display: inline-block; }
@@ -482,4 +535,5 @@ body {
 @media (max-width: 500px) {
     .app { width: 95%; margin: 30px auto; padding: 20px; }
     #answer-btn .btn { width: 100%; font-size: 15px; }
+    .score-secondary { flex-direction: column; align-items: center; }
 }

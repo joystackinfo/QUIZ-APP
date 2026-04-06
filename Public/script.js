@@ -1,14 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // --- DEFAULTS ---
-  let questions = [];       // will hold questions fetched from backend
-  let username = "";        // stores the name the user typed
-  let currentQuestionIndex = 0;  // tracks which question user is on
-  let score = 0;            // counts correct answers
-  let selectedCategory = ""; // stores the category the user picked
+  let questions = [];
+  let username = "";
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let selectedCategory = "";
 
   // --- DOM ELEMENTS ---
-  // Grabbing all the HTML elements needed to show/hide or interact with
   const usernameFormDiv = document.getElementById('username-form');
   const usernameInput = document.getElementById('username-input');
   const usernameSubmitBtn = document.getElementById('submit-username');
@@ -30,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const playAgainBtn = document.getElementById('play-again');
   const changeCategoryBtn = document.getElementById('change-category');
   const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
+  const goHomeBtn = document.getElementById('go-home-btn');
 
   const leaderboardContainer = document.getElementById('leaderboard-container');
   const leaderboardBackButton = document.getElementById('leaderboard-back-btn');
@@ -38,36 +38,40 @@ document.addEventListener("DOMContentLoaded", () => {
   const notificationDiv = document.getElementById('notification');
   const quizBackBtn = document.getElementById('quiz-back-btn');
 
-  // to add/remove the 'hide' CSS class which does display:none
+  // Dynamic heading elements
+  const appTitle = document.getElementById('app-title');
+  const appTagline = document.getElementById('app-tagline');
 
-  function show(el) { // removes 'hide' class to show the element
+  // --- HELPERS ---
+  function show(el) {
     el.classList.remove('hide');
-    // Category section needs 'show' class too because it uses CSS grid
     if (el === categorySelectionDiv) el.classList.add('show');
   }
 
   function hide(el) {
     el.classList.add('hide');
-    if (el === categorySelectionDiv) el.classList.remove('show'); // remove 'show' when hiding category section
+    if (el === categorySelectionDiv) el.classList.remove('show');
   }
 
   function isVisible(el) {
-    // Returns true if element does NOT have the hide class
     return !el.classList.contains('hide');
   }
 
-  // Next button uses 'invisible' instead of 'hide' so it still takes up space
-  // This keeps the Back button at half width even before an answer is selected
-  function showNext() {
-    nextButton.classList.remove('invisible');
-  }
+  function showNext() { nextButton.classList.remove('invisible'); }
+  function hideNext() { nextButton.classList.add('invisible'); }
 
-  function hideNext() {
-    nextButton.classList.add('invisible');
+  // --- DYNAMIC HEADING ---
+  // Changes the h1 title and tagline based on which screen is active
+  function setHeading(title, showTagline = false) {
+    appTitle.textContent = title;
+    if (showTagline) {
+      appTagline.classList.remove('hide');
+    } else {
+      appTagline.classList.add('hide');
+    }
   }
 
   // --- NOTIFICATION TOAST ---
-  // Shows a small popup message at the top of the screen for 3 seconds
   function showNotification(message) {
     notificationDiv.textContent = message;
     notificationDiv.classList.add("show");
@@ -75,10 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- EXPLANATION CARD ---
-  // Called after user selects an answer
-  // isCorrect = true/false, explanation = text string from the question data
   function showExplanation(isCorrect, explanation) {
-    // Clear previous correct/incorrect styling
     explanationCard.classList.remove('correct-card', 'incorrect-card');
 
     if (isCorrect) {
@@ -92,9 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     explanationText.textContent = explanation || '';
-
     explanationCard.classList.remove('hide');
-    // void offsetWidth forces the browser to re-trigger the CSS animation
     void explanationCard.offsetWidth;
   }
 
@@ -103,11 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
     explanationCard.classList.remove('correct-card', 'incorrect-card');
   }
 
-  // --- FETCH QUESTIONS FROM BACKEND ---
-  // Called when user clicks a category button
+  // --- FETCH QUESTIONS ---
   async function fetchQuestionsAndStart() {
     try {
-      // Sends a GET request to backend with the selected category
       const response = await fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`);
       const data = await response.json();
       questions = data;
@@ -130,60 +127,53 @@ document.addEventListener("DOMContentLoaded", () => {
     score = 0;
     progressBar.style.width = '0%';
 
-    // Hide everything except the quiz container
     hide(categorySelectionDiv);
     hide(scoreNotification);
     hide(leaderboardContainer);
 
     show(quizContainerDiv);
-    hideNext();       // Next button hidden (invisible) until user answers
-    hideExplanation(); // Explanation card hidden at start
+    hideNext();
+    hideExplanation();
+
+    setHeading("Test Your Knowledge"); // heading for quiz screen
 
     updateProgressBar();
     showQuestion();
   }
 
   // --- QUIZ BACK BUTTON ---
-  // This one button handles going back from multiple screens
   quizBackBtn.addEventListener('click', () => {
-
     if (isVisible(quizContainerDiv)) {
-      // If in the quiz and not on the first question, go back one question
       if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
         showQuestion();
       } else {
-        // If on first question, go back to category selection
         hide(quizContainerDiv);
         show(categorySelectionDiv);
+        setHeading("Select a Category"); // heading for category screen
       }
-
     } else if (isVisible(scoreNotification)) {
-      // If on the score screen, go back to category selection
       hide(scoreNotification);
       show(categorySelectionDiv);
-
+      setHeading("Select a Category");
     } else if (isVisible(leaderboardContainer)) {
-      // If on the leaderboard, go back to score screen
       hide(leaderboardContainer);
       show(scoreNotification);
+      setHeading("Quiz Complete");
     }
   });
 
   // --- SHOW QUESTION ---
   function showQuestion() {
-    resetState(); // clear previous question's buttons and explanation
+    resetState();
 
     const currentQuestion = questions[currentQuestionIndex];
     questionElement.textContent = `Question ${currentQuestionIndex + 1}: ${currentQuestion.question}`;
 
-    // Dynamically create a button for each answer option
     currentQuestion.answers.forEach(answer => {
       const button = document.createElement('button');
       button.textContent = answer.text;
       button.classList.add('btn');
-
-      // Store whether this answer is correct as a data attribute on the button
       if (answer.correct) button.dataset.correct = "true";
       button.addEventListener('click', selectAnswer);
       answerButtonElement.appendChild(button);
@@ -192,11 +182,11 @@ document.addEventListener("DOMContentLoaded", () => {
     updateProgressBar();
   }
 
-  // --- RESET STATE BETWEEN QUESTIONS ---
+  // --- RESET ---
   function resetState() {
     hideNext();
     hideExplanation();
-    answerButtonElement.innerHTML = ""; // remove all answer buttons
+    answerButtonElement.innerHTML = "";
   }
 
   // --- SELECT ANSWER ---
@@ -206,68 +196,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isCorrect) {
       score++;
-      selectedBtn.classList.add("correct"); // turn green
+      selectedBtn.classList.add("correct");
     } else {
-      selectedBtn.classList.add("incorrect"); // turn red
-      // Also highlight the correct answer so user can see what was right
+      selectedBtn.classList.add("incorrect");
       Array.from(answerButtonElement.children).forEach(btn => {
         if (btn.dataset.correct === "true") btn.classList.add("correct");
       });
     }
 
-    // Disable all buttons so user can't click again
     Array.from(answerButtonElement.children).forEach(btn => {
       btn.disabled = true;
     });
 
-    // Show explanation card with correct/incorrect styling
     const currentQuestion = questions[currentQuestionIndex];
     showExplanation(isCorrect, currentQuestion.explanation);
-
-    showNext(); // reveal the Next button now that user has answered
+    showNext();
   }
 
-  // --- NEXT BUTTON ---
+  // --- NEXT ---
   nextButton.addEventListener('click', () => {
     currentQuestionIndex++;
     if (currentQuestionIndex < questions.length) {
-      showQuestion(); // still more questions
+      showQuestion();
     } else {
-      showScore(); // no more questions, show final score
+      showScore();
     }
   });
 
   // --- PROGRESS BAR ---
   function updateProgressBar() {
     if (!questions.length) return;
-    // Calculate what % of questions have been answered
     const percent = (currentQuestionIndex + 1) / questions.length * 100;
 
-    // Change gradient color based on progress
     let gradient;
     if (percent <= 30) gradient = 'linear-gradient(90deg, #e3c8f7, #d7a0f0)';
     else if (percent <= 70) gradient = 'linear-gradient(90deg, #c079e8, #8b1984)';
-    else gradient = 'linear-gradient(90deg, #5a0f5e, #1cc264)'; // green near end
+    else gradient = 'linear-gradient(90deg, #5a0f5e, #1cc264)';
 
     progressBar.style.width = `${percent}%`;
     progressBar.style.background = gradient;
   }
 
-  // --- SHOW SCORE & SAVE TO BACKEND ---
+  // --- SHOW SCORE ---
   function showScore() {
     hide(quizContainerDiv);
-    // score * 5 because each correct answer = 5 points
     scoreText.textContent = `You scored ${score * 5} points!`;
     show(scoreNotification);
+    setHeading("Quiz Complete"); // heading for score screen
 
-    // Send the score to the backend to be saved in the database
     fetch('http://localhost:3000/api/scores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        username: username,           // the name from username form
-        category: selectedCategory,   // the category they played
-        points: score * 5             // total points earned
+        username: username,
+        category: selectedCategory,
+        points: score * 5
       })
     })
     .then(res => res.json())
@@ -277,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- USERNAME SUBMIT ---
   usernameSubmitBtn.addEventListener('click', () => {
-    const name = usernameInput.value.trim(); // trim removes extra spaces
+    const name = usernameInput.value.trim();
     if (!name) {
       showNotification("Enter your name");
       return;
@@ -285,12 +268,12 @@ document.addEventListener("DOMContentLoaded", () => {
     username = name;
     hide(usernameFormDiv);
     show(categorySelectionDiv);
+    setHeading("Select a Category"); // heading changes when moving to category
   });
 
   // --- CATEGORY SELECTION ---
   document.querySelectorAll(".category-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      // data-category attribute on each button tells us which category was picked
       selectedCategory = btn.dataset.category;
       fetchQuestionsAndStart();
     });
@@ -300,35 +283,32 @@ document.addEventListener("DOMContentLoaded", () => {
   backToUsernameBtn.addEventListener('click', () => {
     hide(categorySelectionDiv);
     show(usernameFormDiv);
+    setHeading("Welcome to Quiz App", true); // show tagline only on username screen
   });
 
   // --- VIEW LEADERBOARD ---
   viewLeaderboardBtn.addEventListener('click', () => {
     hide(scoreNotification);
     show(leaderboardContainer);
+    setHeading("Top Performers"); // heading for leaderboard screen
 
-    // Fetch leaderboard scores for the current category from backend
-    fetch(`http://localhost:3000/api/leaderboard?category=${selectedCategory}`)
+    fetch(`http://localhost:3000/api/scores?category=${selectedCategory}`)
       .then(res => res.json())
       .then(data => {
         const tbody = document.querySelector('#leaderboard-table tbody');
-        tbody.innerHTML = ''; // clear old rows before adding new ones
+        tbody.innerHTML = '';
 
         if (!data.data.length) {
-          tbody.innerHTML = '<tr><td colspan="3">No scores yet</td></tr>'; // show message if no scores for this category
+          tbody.innerHTML = '<tr><td colspan="3">No scores yet</td></tr>';
           return;
         }
 
         data.data.forEach((entry, index) => {
-          // Show medal emojis for top 3, numbers for the rest
           const medals = ['🥇', '🥈', '🥉'];
           const rank = medals[index] || index + 1;
-
-          // Highlight the current user's row in the table
           const isCurrentUser = entry.username === username.trim().toLowerCase();
           const row = document.createElement('tr');
           if (isCurrentUser) row.classList.add('current-user');
-
           row.innerHTML = `
             <td>${rank}</td>
             <td>${entry.username}</td>
@@ -340,15 +320,22 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(err => console.error('Error fetching leaderboard:', err));
   });
 
-  // --- LEADERBOARD BACK → goes back to username form for fresh start ---
+  // --- LEADERBOARD BACK → Score screen ---
   leaderboardBackButton.addEventListener('click', () => {
     hide(leaderboardContainer);
-    hide(scoreNotification);
-    show(usernameFormDiv);
-    usernameInput.value = ''; // clear the name input for next player
+    show(scoreNotification);
+    setHeading("Quiz Complete");
   });
 
-  // --- PLAY AGAIN (same category) ---
+  // --- GO HOME → Username form ---
+  goHomeBtn.addEventListener('click', () => {
+    hide(scoreNotification);
+    show(usernameFormDiv);
+    setHeading("Welcome to Quiz App", true); // show tagline again on home
+    usernameInput.value = '';
+  });
+
+  // --- PLAY AGAIN ---
   playAgainBtn.addEventListener('click', () => {
     startQuiz();
   });
@@ -357,6 +344,10 @@ document.addEventListener("DOMContentLoaded", () => {
   changeCategoryBtn.addEventListener('click', () => {
     hide(scoreNotification);
     show(categorySelectionDiv);
+    setHeading("Select a Category");
   });
 
-});
+  // Set initial heading with tagline on first load
+  setHeading("Welcome to Quiz App", true);
+
+});z
