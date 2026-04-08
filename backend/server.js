@@ -24,7 +24,11 @@ app.use("/api/questions", questionRoutes); // Use question routes
 app.use("/api/admin", adminRoutes); // Use admin routes
 
 // Serve static files from the public directory
-app.use(express.static(path.join(__dirname, "../public"))); 
+app.use(express.static(path.join(__dirname, "../public")));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../public", "index.html"));
+});
 
 // Test route
 app.get("/api/test", (req, res) => {
