@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- FETCH QUESTIONS ---
   async function fetchQuestionsAndStart() {
     try {
-      const response = await fetch(`http://localhost:3000/api/questions?category=${selectedCategory}`);
+      const response = await fetch(`/api/questions?category=${selectedCategory}`)
       const data = await response.json();
       questions = data;
 
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
     show(scoreNotification);
     setHeading("Quiz Complete"); // heading for score screen
 
-    fetch('http://localhost:3000/api/scores', {
+  fetch('/api/scores', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

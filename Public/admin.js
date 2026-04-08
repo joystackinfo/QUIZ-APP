@@ -9,7 +9,7 @@ async function verifyPassword() {
     }
 
     try {
-        const res = await fetch("http://localhost:3000/api/admin/verify-password", {
+        const res = await fetch('/api/admin/verify-password', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ password })
@@ -32,7 +32,7 @@ async function verifyPassword() {
 await verifyPassword();
 
 // Base URL for all admin API calls
-const BASE_URL = "http://localhost:3000/api/admin";
+const BASE_URL = "/api/admin";
 
 // SIDEBAR NAVIGATION
 
