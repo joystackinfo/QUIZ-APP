@@ -63,6 +63,10 @@ A fun interactive quiz app built with **HTML** , **CSS** and **JAVASCRIPT**.User
 ---
 
 ## 📦 Future Enhancements
+* 🔐 Add authentication (login/signup)
+* ⏳Timer for each question.
+* Theme customization.
+
 
 ## 📬 Contact
 For questions or feedback, reach out  via email at [joynelsoninfo@gmail.com]

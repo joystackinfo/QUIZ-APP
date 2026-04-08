@@ -10,6 +10,8 @@ const mongoose = require('mongoose');
 const app = express()
 require('dotenv').config();
 
+
+
 //middlewares
 app.use(cors());
 app.use(express.json());
