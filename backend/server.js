@@ -4,7 +4,7 @@ const path = require("path");
 const cors = require("cors"); 
 const scoreRoutes = require('./routes/score.route');
 const questionRoutes = require('./routes/question.route');
-const adminRoutes = require('./routes/admin.route');
+const adminRoutes = require('./routes/admin.route');``
 
 const mongoose = require('mongoose');
 const app = express()
@@ -24,10 +24,12 @@ app.use("/api/questions", questionRoutes); // Use question routes
 app.use("/api/admin", adminRoutes); // Use admin routes
 
 // Serve static files from the public directory
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
+
+console.log("Public folder path:", path.join(__dirname, "../public"));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html")); // Serve the main HTML file for the quiz app
+    res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
 
 // Test route
