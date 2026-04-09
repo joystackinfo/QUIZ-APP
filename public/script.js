@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
     show(leaderboardContainer);
     setHeading("Top Performers"); // heading for leaderboard screen
 
-    fetch(`http://localhost:3000/api/scores?category=${selectedCategory}`)
+    fetch(`/api/scores?category=${selectedCategory}`)
       .then(res => res.json())
       .then(data => {
         const tbody = document.querySelector('#leaderboard-table tbody');
