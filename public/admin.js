@@ -226,6 +226,11 @@ async function deleteQuestion(id) {
         console.error("Error deleting question:", error);
     }
 }
+//expose deleteQuestion to global scope so it can be called from the onclick attribute in the generated HTML
+window.deleteQuestion = deleteQuestion;
+window.loadQuestions = loadQuestions; // Also expose loadQuestions so it can be called after edits and deletions
+window.loadStats = loadStats; // Expose loadStats to refresh stats after changes
+window.deleteScore = deleteScore; // Expose deleteScore for score deletion
 
 // =====================
 // EDIT QUESTION
